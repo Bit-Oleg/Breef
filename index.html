@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БРИФ на UX/UI дизайн</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/180/000000/layers.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/32/000000/layers.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Preload Inter шрифт щоб він гарантовано завантажився до генерації PDF -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=block" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ПРОГРЕС-БАР */
+        .progress-wrap{position:sticky;top:0;z-index:100;background:white;padding:.6rem 1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+        .progress-inner{max-width:48rem;margin:0 auto;}
+        .progress-label{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;color:#64748b;margin-bottom:5px;}
+        .progress-track{background:#e2e8f0;border-radius:9999px;height:5px;overflow:hidden;}
+        .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:9999px;transition:width .4s ease;}
+
+        /* ОБОВ ЯЗКОВІ */
+        label .req{color:#ef4444;margin-left:2px;}
+        input.invalid,textarea.invalid{border-color:#ef4444!important;background:#fff5f5!important;}
+        .field-error{color:#ef4444;font-size:.78rem;margin-top:-.6rem;margin-bottom:.75rem;display:none;}
+        .field-error.show{display:block;}
+
+        /* ПІДКАЗКИ */
+        .hint{display:inline-block;width:16px;height:16px;background:#e2e8f0;border-radius:50%;font-size:.68rem;font-weight:700;color:#64748b;text-align:center;line-height:16px;cursor:pointer;position:relative;margin-left:5px;vertical-align:middle;}
+        .hint:hover::after{content:attr(data-tip);position:absolute;left:22px;top:-4px;background:#1e293b;color:white;font-size:.73rem;font-weight:400;padding:.5rem .75rem;border-radius:.5rem;width:210px;white-space:normal;line-height:1.45;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+
+        /* CHECKBOXES */
+        .checkbox-group label{display:flex;align-items:center;gap:8px;font-weight:400;margin-bottom:6px;cursor:pointer;}
+        .material-item{margin-bottom:1.25rem;}
+        .module-group{margin-bottom:1.25rem;}
+
+        /* БЮДЖЕТ */
+        .budget-display{font-size:1.1rem;font-weight:700;color:#2563eb;margin-bottom:8px;}
+        input[type="range"]{width:100%;accent-color:#2563eb;cursor:pointer;margin-bottom:4px;}
+        .budget-labels{display:flex;justify-content:space-between;font-size:.73rem;color:#94a3b8;margin-bottom:1rem;}
+
+        /* ЛІЧИЛЬНИК ФАЙЛІВ */
+        .file-counter{display:inline-flex;align-items:center;gap:6px;background:#eff6ff;color:#2563eb;font-size:.8rem;font-weight:600;padding:.3rem .7rem;border-radius:9999px;margin-left:8px;display:none;}
+        .file-counter.show{display:inline-flex;}
+
+        /* SUCCESS OVERLAY */
+        .success-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(10px);z-index:9999;align-items:center;justify-content:center;padding:1rem;}
+        .success-overlay.show{display:flex;}
+        .success-card{background:white;border-radius:1.75rem;padding:2.5rem 2rem 2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.22);animation:popIn .45s cubic-bezier(.34,1.56,.64,1);}
+        @keyframes popIn{from{opacity:0;transform:scale(.8) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
+        .success-icon-wrap{width:76px;height:76px;background:linear-gradient(135deg,#10b981,#059669);border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:2.1rem;box-shadow:0 8px 28px rgba(16,185,129,.38);}
+        .success-card h2{font-size:1.45rem;font-weight:800;color:#0f172a;margin:0 0 .45rem;}
+        .success-sub{color:#64748b;font-size:.92rem;margin:0 0 .25rem;line-height:1.55;}
+        .success-email-note{display:inline-flex;align-items:center;gap:6px;background:#eff6ff;color:#2563eb;font-size:.82rem;font-weight:600;padding:.4rem .9rem;border-radius:9999px;margin:.75rem 0 1.75rem;}
+        .success-actions{display:flex;flex-direction:column;gap:.7rem;}
+        .btn-pdf{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;border:none;padding:.9rem 1.5rem;border-radius:.85rem;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 6px 20px rgba(37,99,235,.35);display:flex;align-items:center;justify-content:center;gap:8px;}
+        .btn-pdf:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.42);}
+        .btn-pdf:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+        .btn-close-success{background:#f1f5f9;color:#475569;border:none;padding:.7rem 1.5rem;border-radius:.85rem;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s;}
+        .btn-close-success:hover{background:#e2e8f0;}
+    </style>
+</head>
+<body>
+
+<!-- ПРОГРЕС-БАР -->
+<div class="progress-wrap">
+    <div class="progress-inner">
+        <div class="progress-label">
+            <span>Заповнення брифу</span>
+            <span id="progress-text">0%</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+</div>
+
+<header>
+    <h1>&#x1F4DD; БРИФ на UX/UI дизайн</h1>
+    <p>Дякуємо за час, приділений заповненню брифу. Детальні відповіді допоможуть нам створити сайт, що повністю відповідає вашим очікуванням.</p>
+</header>
+
+<main>
+  <form name="site-brief" id="brief-form" method="POST" enctype="multipart/form-data">
+    <!-- Web3Forms access key — замініть YOUR_ACCESS_KEY на свій ключ з web3forms.com -->
+    <input type="hidden" name="access_key" value="bea45c28-7de8-42c9-a088-57dbc283d3db">
+    <input type="hidden" name="subject" value="Новий бриф на UX/UI дизайн">
+    <input type="hidden" name="from_name" value="Бриф сайт">
+    <input type="hidden" name="redirect" value="false">
+    <p style="display:none;"><label>Bot field: <input name="botcheck" style="display:none"></label></p>
+
+    <!-- UTM мітки — заповнюються автоматично з URL -->
+    <input type="hidden" name="utm_source"   id="utm_source">
+    <input type="hidden" name="utm_medium"   id="utm_medium">
+    <input type="hidden" name="utm_campaign" id="utm_campaign">
+    <input type="hidden" name="utm_content"  id="utm_content">
+    <input type="hidden" name="utm_term"     id="utm_term">
+    <input type="hidden" name="referrer"     id="referrer">
+
+    <!-- 1. Контактна інформація -->
+    <fieldset id="section1">
+        <legend>&#x1F4A1; 1. Контактна інформація</legend>
+        <p>
+            <label for="company">Компанія <span class="req">*</span></label>
+            <input type="text" id="company" name="company" placeholder="Назва компанії" required>
+            <span class="field-error" id="err-company">Будь ласка, вкажіть назву компанії</span>
+        </p>
+        <p>
+            <label for="contact_person">Контактна особа <span class="req">*</span> <span class="hint" data-tip="ПІБ та посада людини, з якою ми будемо спілкуватись">?</span></label>
+            <input type="text" id="contact_person" name="contact_person" placeholder="ПІБ, посада" required>
+            <span class="field-error" id="err-contact">Вкажіть контактну особу</span>
+        </p>
+        <p>
+            <label for="phone">Телефон <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+380XXXXXXXXX" required>
+            <span class="field-error" id="err-phone">Вкажіть коректний номер телефону</span>
+        </p>
+        <p>
+            <label for="email">E-mail <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+            <span class="field-error" id="err-email">Вкажіть коректний e-mail</span>
+        </p>
+        <p>
+            <label for="other_contacts">Інші контакти <span class="hint" data-tip="Telegram, Instagram, Viber — будь-який зручний канал">?</span></label>
+            <input type="text" id="other_contacts" name="other_contacts">
+        </p>
+    </fieldset>
+
+    <!-- 2. Про компанію -->
+    <fieldset id="section2">
+        <legend>&#x1F4A1; 2. Про компанію</legend>
+        <p>
+            <label for="business_sphere">Сфера діяльності</label>
+            <input type="text" id="business_sphere" name="business_sphere" placeholder="Наприклад: будівництво, IT, краса...">
+        </p>
+        <p>
+            <label for="product_service">Продукт / послуга</label>
+            <input type="text" id="product_service" name="product_service" placeholder="Що ви пропонуєте?">
+        </p>
+        <p>
+            <label for="product_description">Опис продукту <span class="hint" data-tip="Технічні характеристики, переваги, особливості — чим детальніше, тим краще">?</span></label>
+            <textarea id="product_description" name="product_description" rows="4"></textarea>
+        </p>
+        <p>
+            <label for="usp">УТП — Унікальна торгова пропозиція <span class="hint" data-tip="Чому клієнти обирають саме вас? Наприклад: 24/7 підтримка, гарантія 5 років, найнижча ціна в регіоні">?</span></label>
+            <textarea id="usp" name="usp" rows="3" placeholder="Чому купують саме у вас?"></textarea>
+        </p>
+        <p>
+            <label for="geography">Географія надання послуг</label>
+            <input type="text" id="geography" name="geography" placeholder="Наприклад: Україна, Київ та область">
+        </p>
+        <p>
+            <label for="current_website">Поточний сайт (якщо є)</label>
+            <input type="url" id="current_website" name="current_website" placeholder="https://example.com">
+        </p>
+        <p>
+            <label for="social_media">Соціальні мережі</label>
+            <input type="text" id="social_media" name="social_media" placeholder="Facebook, Instagram, LinkedIn...">
+        </p>
+        <p>
+            <label for="keywords">Ключові пошукові запити <span class="hint" data-tip="За якими словами вас мають знаходити в Google? Наприклад: ремонт квартир Київ">?</span></label>
+            <textarea id="keywords" name="keywords" rows="2" placeholder="Слова через кому..."></textarea>
+        </p>
+    </fieldset>
+
+    <!-- 3. Цільова аудиторія -->
+    <fieldset id="section3">
+        <legend>&#x1F4A1; 3. Цільова аудиторія</legend>
+        <p>
+            <label for="problem_solving">Яку проблему вирішує продукт <span class="hint" data-tip="Наприклад: люди хочуть зробити ремонт але не знають з чого почати">?</span></label>
+            <textarea id="problem_solving" name="problem_solving" rows="3" placeholder="Наприклад: інвестиції, дозвілля..."></textarea>
+        </p>
+        <p>
+            <label for="gender_ratio">Стать аудиторії</label>
+            <input type="text" id="gender_ratio" name="gender_ratio" placeholder="Наприклад: 60% жінки, 40% чоловіки">
+        </p>
+        <p>
+            <label for="age_ratio">Вік аудиторії</label>
+            <input type="text" id="age_ratio" name="age_ratio" placeholder="Наприклад: 25–45 років">
+        </p>
+        <p>
+            <label for="financial_status">Фінансовий стан</label>
+            <input type="text" id="financial_status" name="financial_status" placeholder="Середній рівень доходу">
+        </p>
+        <p>
+            <label for="target_interests">Інтереси аудиторії <span class="hint" data-tip="Це допомагає підібрати правильний тон, зображення та посили на сайті">?</span></label>
+            <textarea id="target_interests" name="target_interests" rows="2" placeholder="Бізнес, подорожі, краса..."></textarea>
+        </p>
+    </fieldset>
+
+    <!-- 4. Бачення сайту -->
+    <fieldset id="section4">
+        <legend>&#x1F4A1; 4. Бачення майбутнього дизайну</legend>
+        <p>
+            <label for="site_goals">Цілі дизайну</label>
+            <input type="text" id="site_goals" name="site_goals" placeholder="Залучення клієнтів, конверсія, імідж...">
+        </p>
+        <p>
+            <label for="user_action">Очікувана дія користувача</label>
+            <input type="text" id="user_action" name="user_action" placeholder="Купити, залишити контакти, завантажити файл...">
+        </p>
+        <p>
+            <label for="style_preferences">Стилістика</label>
+            <input type="text" id="style_preferences" name="style_preferences" placeholder="Суворий, стильний, легкий, яскравий...">
+        </p>
+        <p>
+            <label for="color_scheme">Кольорова гама</label>
+            <input type="text" id="color_scheme" name="color_scheme" placeholder="Ваші побажання щодо кольорів">
+        </p>
+        <p><strong>Обов'язкові розділи:</strong></p>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="sections" value="header"> Хедер (логотип, оффер, CTA)</label>
+            <label><input type="checkbox" name="sections" value="product_info"> Інформація про товар</label>
+            <label><input type="checkbox" name="sections" value="advantages"> Переваги компанії</label>
+            <label><input type="checkbox" name="sections" value="cta_section"> Розділ взаємодії (форма, CTA)</label>
+            <label><input type="checkbox" name="sections" value="footer"> Футер (адреса, контакти)</label>
+        </div>
+        <p>
+            <label for="technical_aspects">Технічні аспекти <span class="hint" data-tip="Наприклад: адаптивність, SEO, інтеграції з CRM, чат-бот...">?</span></label>
+            <textarea id="technical_aspects" name="technical_aspects" rows="3"></textarea>
+        </p>
+    </fieldset>
+
+    <!-- 5. Конкуренти -->
+    <fieldset id="section5">
+        <legend>&#x1F4A1; 5. Конкуренти</legend>
+        <p>
+            <label for="competitor_link">Посилання на конкурента</label>
+            <input type="url" id="competitor_link" name="competitor_link" placeholder="https://example.com">
+        </p>
+        <p>
+            <label for="competitor_likes">Що подобається у конкурентів</label>
+            <textarea id="competitor_likes" name="competitor_likes" rows="3" placeholder="Контент, швидкість, архітектура..."></textarea>
+            <span class="file-label-text">Скриншоти — можна кілька:</span>
+            <div class="file-upload-wrapper">
+                <label for="likes_file" class="custom-file-btn">&#x1F4F8; Обрати файли</label>
+                <input type="file" id="likes_file" name="likes_file" multiple onchange="updateFileName(this)">
+                <span class="file-status">Файл не обрано</span>
+                <span class="file-counter" id="counter-likes_file"></span>
+            </div>
+        </p>
+        <p>
+            <label for="competitor_dislikes">Що НЕ подобається</label>
+            <textarea id="competitor_dislikes" name="competitor_dislikes" rows="3" placeholder="Старий дизайн, незрозуміла логіка..."></textarea>
+            <span class="file-label-text">Скриншоти — можна кілька:</span>
+            <div class="file-upload-wrapper">
+                <label for="dislikes_file" class="custom-file-btn">&#x1F4F8; Обрати файли</label>
+                <input type="file" id="dislikes_file" name="dislikes_file" multiple onchange="updateFileName(this)">
+                <span class="file-status">Файл не обрано</span>
+                <span class="file-counter" id="counter-dislikes_file"></span>
+            </div>
+        </p>
+    </fieldset>
+
+    <!-- 6. Матеріали -->
+    <fieldset id="section6">
+        <legend>&#x1F4A1; 6. Матеріали для роботи</legend>
+        <div class="material-item">
+            <label><input type="checkbox" name="materials" value="logo"> Логотип</label>
+            <input type="url" name="logo_link" placeholder="Посилання на хмару">
+            <div class="file-upload-wrapper">
+                <label for="logo_file" class="custom-file-btn">&#x1F4C1; Завантажити файли</label>
+                <input type="file" id="logo_file" name="logo_file" multiple onchange="updateFileName(this)">
+                <span class="file-status">Файл не обрано</span>
+                <span class="file-counter" id="counter-logo_file"></span>
+            </div>
+        </div>
+        <div class="material-item">
+            <label><input type="checkbox" name="materials" value="brand_style"> Фірмовий стиль</label>
+            <input type="url" name="brand_style_link" placeholder="Посилання">
+        </div>
+        <div class="material-item">
+            <label><input type="checkbox" name="materials" value="photos"> Фото продукту/команди</label>
+            <input type="url" name="photos_link" placeholder="Посилання">
+        </div>
+        <div class="material-item">
+            <label><input type="checkbox" name="materials" value="videos"> Відеоролики</label>
+            <input type="url" name="videos_link" placeholder="Посилання">
+        </div>
+        <div class="material-item">
+            <label><input type="checkbox" name="materials" value="reviews"> Відгуки / Подяки</label>
+            <input type="url" name="reviews_link" placeholder="Посилання">
+        </div>
+        <div class="material-item">
+            <label><input type="checkbox" name="materials" value="news"> Акції / Новини</label>
+            <input type="url" name="news_link" placeholder="Посилання">
+        </div>
+        <p>
+            <label for="content_owner">Хто надає контент (тексти, фото)? <span class="hint" data-tip="Від цього залежить вартість: якщо контент замовляєте у нас — вкажіть це">?</span></label>
+            <input type="text" id="content_owner" name="content_owner" placeholder="Ми самі / замовляємо у вас / частково">
+        </p>
+    </fieldset>
+
+    <!-- 7. Функціональні модулі -->
+    <fieldset id="section7">
+        <legend>&#x1F4A1; 7. Функціональні модулі</legend>
+        <div class="module-group">
+            <p><strong>Пошук на сайті:</strong></p>
+            <label class="radio-label"><input type="radio" name="search_status" value="yes"> &#x2705; Так, потрібен</label>
+            <label class="radio-label"><input type="radio" name="search_status" value="no" checked> &#x274C; Ні</label>
+            <input type="text" name="search_comment" placeholder="Приклад або коментар">
+        </div>
+        <div class="module-group">
+            <p><strong>Підписка / Розсилка:</strong></p>
+            <label class="radio-label"><input type="radio" name="subscribe_status" value="yes"> &#x2705; Так</label>
+            <label class="radio-label"><input type="radio" name="subscribe_status" value="no" checked> &#x274C; Ні</label>
+            <input type="text" name="subscribe_comment" placeholder="Приклад або коментар">
+        </div>
+        <div class="module-group">
+            <p><strong>Блог:</strong></p>
+            <label class="radio-label"><input type="radio" name="blog_status" value="yes"> &#x2705; Так</label>
+            <label class="radio-label"><input type="radio" name="blog_status" value="no" checked> &#x274C; Ні</label>
+        </div>
+        <div class="module-group">
+            <p><strong>Каталог / Магазин:</strong></p>
+            <label class="radio-label"><input type="radio" name="shop_status" value="yes"> &#x2705; Так</label>
+            <label class="radio-label"><input type="radio" name="shop_status" value="no" checked> &#x274C; Ні</label>
+            <input type="text" name="shop_comment" placeholder="Кількість товарів, фільтри...">
+        </div>
+        <div class="module-group">
+            <p><strong>Інтеграція з CRM / сервісами:</strong></p>
+            <label class="radio-label"><input type="radio" name="crm_status" value="yes"> &#x2705; Так</label>
+            <label class="radio-label"><input type="radio" name="crm_status" value="no" checked> &#x274C; Ні</label>
+            <input type="text" name="crm_comment" placeholder="Telegram, Email, CRM...">
+        </div>
+        <div class="module-group">
+            <p><strong>Платіжні системи:</strong></p>
+            <label class="radio-label"><input type="radio" name="payments_status" value="yes"> &#x2705; Так</label>
+            <label class="radio-label"><input type="radio" name="payments_status" value="no" checked> &#x274C; Ні</label>
+            <input type="text" name="payments_comment" placeholder="LiqPay, Stripe...">
+        </div>
+        <div class="module-group">
+            <p><strong>Сервіси доставки:</strong></p>
+            <label class="radio-label"><input type="radio" name="delivery_status" value="yes"> &#x2705; Так</label>
+            <label class="radio-label"><input type="radio" name="delivery_status" value="no" checked> &#x274C; Ні</label>
+            <input type="text" name="delivery_comment" placeholder="Нова Пошта, Укрпошта...">
+        </div>
+        <div class="module-group">
+            <p><strong>Аналітика / Піксель / Чати:</strong></p>
+            <label class="radio-label"><input type="radio" name="analytics_status" value="yes"> &#x2705; Так</label>
+            <label class="radio-label"><input type="radio" name="analytics_status" value="no" checked> &#x274C; Ні</label>
+            <input type="text" name="analytics_comment" placeholder="Google Analytics, Facebook Pixel...">
+        </div>
+        <div class="module-group">
+            <p><strong>Мови інтерфейсу: <span class="hint" data-tip="Оберіть мови, якими має бути доступний сайт">?</span></strong></p>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="lang" value="uk" checked> &#x1F1FA;&#x1F1E6; Українська</label>
+                <label><input type="checkbox" name="lang" value="en"> &#x1F1EC;&#x1F1E7; Англійська</label>
+            </div>
+            <input type="text" name="lang_other" placeholder="Інші мови за побажанням...">
+        </div>
+    </fieldset>
+
+    <!-- 9. Примітки -->
+    <fieldset id="section8">
+        <legend>&#x1F4A1; 8. Примітки</legend>
+        <label for="additional_notes">Додайте будь-що, на чому хочете зробити акцент:</label>
+        <textarea id="additional_notes" name="additional_notes" rows="6" placeholder="Ваші побажання..."></textarea>
+    </fieldset>
+
+    <button type="submit" class="submit-btn" id="submit-btn">&#x1F680; Відправити бриф</button>
+  </form>
+
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2026 Всі права захищені</p>
+            <p>Розробка брифу та підтримка: <strong>ВАЛЕНТИНА ОКОРЕШКО</strong></p>
+            <div class="footer-socials">
+                <a href="https://t.me/okoreshko88" target="_blank" class="social-link">Telegram</a>
+                <span class="divider">|</span>
+               <a href="mailto:okoreshko88@gmail.com" class="social-link">Email</a>
+            </div>
+        </div>
+    </footer>
+</main>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success-overlay">
+    <div class="success-card">
+        <div class="success-icon-wrap">&#x2705;</div>
+        <h2>Бриф відправлено!</h2>
+        <p class="success-sub">Дякуємо! Ми отримали ваш бриф і зв'яжемося з вами найближчим часом.</p>
+        <div class="success-email-note">
+            &#x2709;&#xFE0F; Копія надійде на вашу пошту
+        </div>
+        <div class="success-actions">
+            <button class="btn-pdf" id="btn-download-pdf" onclick="downloadPDF()">
+                &#x1F4E5; Завантажити PDF-копію брифу
+            </button>
+            <button class="btn-close-success" onclick="closeSuccess()">
+                Закрити
+                      </button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
