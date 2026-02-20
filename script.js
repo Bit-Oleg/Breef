@@ -129,21 +129,43 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = true;
 
         try {
-            // Web3Forms — відправляємо як FormData (підтримує файли)
+            // Збираємо тільки текстові поля (без файлів) у URLSearchParams
+            // Web3Forms найстабільніше працює з application/x-www-form-urlencoded
             const formData = new FormData(form);
+            const params = new URLSearchParams();
 
-            const response = await fetch('https://api.web3forms.com/submit', {
+            for (const [key, value] of formData.entries()) {
+                if (typeof value === 'string') {
+                    params.append(key, value);
+                }
+            }
+
+            const fetchOptions = {
                 method: 'POST',
-                body: formData
-            });
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                },
+            };
 
-            const result = await response.json();
+            // Відправляємо на обидва акаунти паралельно
+            const params2 = new URLSearchParams(params.toString());
+            params2.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
 
-            if (result.success) {
+            const [res1, res2] = await Promise.all([
+                fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params.toString() }),
+                fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params2.toString() }),
+            ]);
+
+            const [result1, result2] = await Promise.all([res1.json(), res2.json()]);
+            console.log('Web3Forms #1:', result1);
+            console.log('Web3Forms #2:', result2);
+
+            if (result1.success || result2.success) {
                 showSuccess();
             } else {
-                console.error('Web3Forms error:', result);
-                showSuccess(); // Показуємо успіх щоб не блокувати PDF
+                console.error('Both failed:', result1.message, result2.message);
+                showSuccess();
             }
         } catch (err) {
             console.error('Submit error:', err);
@@ -202,40 +224,57 @@ async function downloadPDF() {
         if (header)   header.style.display   = 'none';
 
         window.scrollTo(0, 0);
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 200));
 
-        // Тимчасово збільшуємо висоту полів щоб текст не обрізався
-        const inputs = Array.from(document.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], input[type="url"]'));
-        const origInputStyles = inputs.map(el => el.getAttribute('style') || '');
-        inputs.forEach(el => {
-            el.style.height = 'auto';
-            el.style.minHeight = '2.5rem';
-            el.style.lineHeight = '2.5rem';
-            el.style.paddingTop = '0.5rem';
-            el.style.paddingBottom = '0.5rem';
+        // ===== КЛЮЧОВИЙ ФІХ: замінюємо input/textarea на div перед рендером =====
+        const form = document.getElementById('brief-form');
+        const replacements = [];
+
+        form.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], input[type="url"], textarea').forEach(el => {
+            const div = document.createElement('div');
+            const val = el.value.trim();
+            const ph  = el.placeholder || '';
+
+            // Копіюємо computed стилі
+            const cs = window.getComputedStyle(el);
+            div.style.cssText = [
+                'font-family:' + cs.fontFamily,
+                'font-size:'   + cs.fontSize,
+                'font-weight:' + cs.fontWeight,
+                'color:'       + (val ? '#0f172a' : '#94a3b8'),
+                'background:'  + cs.backgroundColor,
+                'border:'      + cs.border,
+                'border-radius:' + cs.borderRadius,
+                'padding:0.6rem 1rem',
+                'margin-bottom:1rem',
+                'min-height:2.6rem',
+                'width:100%',
+                'box-sizing:border-box',
+                'word-break:break-word',
+                'white-space:pre-wrap',
+                'line-height:1.5',
+            ].join(';');
+
+            div.textContent = val || ph;
+            if (el.tagName === 'TEXTAREA' && !val) {
+                div.style.minHeight = (parseInt(el.rows) * 1.5 + 1.2) + 'rem';
+            }
+
+            el.parentNode.insertBefore(div, el);
+            el.style.display = 'none';
+            replacements.push({ original: el, replacement: div });
         });
 
-        const fieldsets = Array.from(document.querySelectorAll('fieldset'));
-        const origStyles = fieldsets.map(fs => fs.getAttribute('style') || '');
-        fieldsets.forEach(fs => {
-            fs.style.marginBottom = '8px';
-            fs.style.padding = '1rem';
-        });
         await new Promise(r => setTimeout(r, 100));
 
         const main = document.querySelector('main');
         const mainRect = main.getBoundingClientRect();
         const SCALE = 2;
 
-        // Збираємо безпечні точки розриву ДО рендеру
+        // Збираємо точки розриву
         const safeBreaks = new Set([0]);
-        [
-            'fieldset > p',
-            'fieldset > div.module-group',
-            'fieldset > div.material-item',
-            'fieldset > div.checkbox-group',
-            'fieldset',
-        ].forEach(sel => {
+        ['fieldset > p', 'fieldset > div.module-group', 'fieldset > div.material-item',
+         'fieldset > div.checkbox-group', 'fieldset'].forEach(sel => {
             document.querySelectorAll(sel).forEach(el => {
                 const rect = el.getBoundingClientRect();
                 const topY    = Math.round((rect.top    - mainRect.top) * SCALE);
@@ -262,13 +301,12 @@ async function downloadPDF() {
             windowHeight: main.scrollHeight,
         });
 
-        // Відновлюємо стилі
-        inputs.forEach((el, i) => {
-            el.setAttribute('style', origInputStyles[i]);
+        // ===== Відновлюємо оригінальні поля =====
+        replacements.forEach(({ original, replacement }) => {
+            original.style.display = '';
+            replacement.parentNode.removeChild(replacement);
         });
-        fieldsets.forEach((fs, i) => {
-            fs.setAttribute('style', origStyles[i]);
-        });
+
         submitBtn.style.display = '';
         if (progress) progress.style.display = '';
         if (footer)   footer.style.display   = '';
@@ -279,7 +317,7 @@ async function downloadPDF() {
         safeBreaks.add(fullCanvas.height);
         const breakPoints = Array.from(safeBreaks).sort((a, b) => a - b);
 
-        // A4 параметри
+        // A4
         const PAGE_W    = 210;
         const PAGE_H    = 297;
         const MARGIN    = 10;
@@ -288,19 +326,14 @@ async function downloadPDF() {
         const pxPerMm   = fullCanvas.width / CONT_W;
         const pageMaxPx = Math.floor(CONT_H * pxPerMm);
 
-        // Нарізаємо по безпечних точках
         const pages = [];
         let pageStart = 0;
-
         while (pageStart < fullCanvas.height) {
             const maxEnd = pageStart + pageMaxPx;
-
             if (maxEnd >= fullCanvas.height) {
                 pages.push({ start: pageStart, end: fullCanvas.height });
                 break;
             }
-
-            // Найближча безпечна точка <= maxEnd
             let bestBreak = -1;
             for (let i = breakPoints.length - 1; i >= 0; i--) {
                 if (breakPoints[i] <= maxEnd && breakPoints[i] > pageStart) {
@@ -309,19 +342,15 @@ async function downloadPDF() {
                 }
             }
             if (bestBreak === -1) bestBreak = Math.min(maxEnd, fullCanvas.height);
-
             pages.push({ start: pageStart, end: bestBreak });
             pageStart = bestBreak;
         }
 
-        // Генеруємо PDF
         const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-
         for (let pi = 0; pi < pages.length; pi++) {
             if (pi > 0) pdf.addPage();
             const { start, end } = pages[pi];
             const sliceH = end - start;
-
             const slice = document.createElement('canvas');
             slice.width  = fullCanvas.width;
             slice.height = sliceH;
@@ -329,12 +358,10 @@ async function downloadPDF() {
             ctx.fillStyle = '#f8fafc';
             ctx.fillRect(0, 0, slice.width, slice.height);
             ctx.drawImage(fullCanvas, 0, start, fullCanvas.width, sliceH, 0, 0, fullCanvas.width, sliceH);
-
             const sliceMmH = sliceH / pxPerMm;
             pdf.addImage(slice.toDataURL('image/jpeg', 0.92), 'JPEG', MARGIN, MARGIN, CONT_W, sliceMmH);
         }
 
-        // Нумерація
         const total = pdf.internal.getNumberOfPages();
         for (let i = 1; i <= total; i++) {
             pdf.setPage(i);
