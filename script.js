@@ -129,103 +129,74 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = true;
 
         try {
-            // Збираємо тільки текстові поля (без файлів) у URLSearchParams
-            // Web3Forms найстабільніше працює з application/x-www-form-urlencoded
             const formData = new FormData(form);
-            const params = new URLSearchParams();
-
-            for (const [key, value] of formData.entries()) {
-                if (typeof value === 'string') {
-                    params.append(key, value);
-                }
-            }
-
-            // Формуємо красивий HTML лист
-            const get = (name) => (formData.get(name) || '').trim();
+            const getF = (name) => (formData.get(name) || '').trim();
             const langs = formData.getAll('lang').join(', ') || '—';
-            const sections = formData.getAll('sections').join(', ') || '—';
-            const materials = formData.getAll('materials').join(', ') || '—';
 
-            const row = (label, value) => value
-                ? `<tr><td style="padding:8px 12px;color:#9E7C80;font-size:13px;width:40%;vertical-align:top;border-bottom:1px solid #f0f0f0">${label}</td><td style="padding:8px 12px;color:#1F1F1F;font-size:13px;vertical-align:top;border-bottom:1px solid #f0f0f0"><strong>${value}</strong></td></tr>`
-                : '';
+            // Завантажуємо EmailJS
+            await loadScript('https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js');
+            emailjs.init('s4yypLB79jR80UOtA');
 
-            const section = (title, rows) => `
-                <tr><td colspan="2" style="padding:16px 12px 6px;background:#5E0B15;color:#F5F5F3;font-size:13px;font-weight:700;letter-spacing:0.05em">${title}</td></tr>
-                ${rows}`;
-
-            const fetchOptions = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json'
-                },
+            const templateParams = {
+                company:             getF('company'),
+                contact_person:      getF('contact_person'),
+                phone:               getF('phone'),
+                email:               getF('email'),
+                other_contacts:      getF('other_contacts') || '—',
+                business_sphere:     getF('business_sphere') || '—',
+                product_service:     getF('product_service') || '—',
+                product_description: getF('product_description') || '—',
+                usp:                 getF('usp') || '—',
+                geography:           getF('geography') || '—',
+                current_website:     getF('current_website') || '—',
+                social_media:        getF('social_media') || '—',
+                problem_solving:     getF('problem_solving') || '—',
+                gender_ratio:        getF('gender_ratio') || '—',
+                age_ratio:           getF('age_ratio') || '—',
+                financial_status:    getF('financial_status') || '—',
+                target_interests:    getF('target_interests') || '—',
+                site_goals:          getF('site_goals') || '—',
+                user_action:         getF('user_action') || '—',
+                style_preferences:   getF('style_preferences') || '—',
+                color_scheme:        getF('color_scheme') || '—',
+                technical_aspects:   getF('technical_aspects') || '—',
+                competitor_link:     getF('competitor_link') || '—',
+                competitor_likes:    getF('competitor_likes') || '—',
+                competitor_dislikes: getF('competitor_dislikes') || '—',
+                content_owner:       getF('content_owner') || '—',
+                search_status:       getF('search_status') || '—',
+                blog_status:         getF('blog_status') || '—',
+                shop_status:         getF('shop_status') || '—',
+                shop_comment:        getF('shop_comment') || '',
+                crm_status:          getF('crm_status') || '—',
+                crm_comment:         getF('crm_comment') || '',
+                payments_status:     getF('payments_status') || '—',
+                payments_comment:    getF('payments_comment') || '',
+                delivery_status:     getF('delivery_status') || '—',
+                delivery_comment:    getF('delivery_comment') || '',
+                analytics_status:    getF('analytics_status') || '—',
+                analytics_comment:   getF('analytics_comment') || '',
+                langs:               langs,
+                lang_other:          getF('lang_other') || '',
+                additional_notes:    getF('additional_notes') || '—',
+                utm_source:          getF('utm_source') || '—',
+                utm_medium:          getF('utm_medium') || '—',
+                utm_campaign:        getF('utm_campaign') || '—',
+                referrer:            getF('referrer') || '—',
+                send_date:           new Date().toLocaleDateString('uk-UA'),
             };
 
-            // Відправляємо всі дані як FormData
-            const sendData = new FormData();
-            sendData.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
-            sendData.set('subject', 'Новий бриф на UX/UI дизайн');
-            sendData.set('from_name', 'Бриф сайт');
+            const result = await emailjs.send(
+                'service_i2m41jf',
+                'template_6s72c1s',
+                templateParams
+            );
 
-            // Всі текстові поля форми
-            for (const [k, v] of new FormData(form).entries()) {
-                if (typeof v === 'string') sendData.set(k, v);
-            }
+            console.log('EmailJS:', result);
+            showSuccess();
 
-            // Зручний текстовий summary
-            sendData.set('message', [
-                'КОМПАНІЯ: ' + get('company'),
-                'КОНТАКТ: ' + get('contact_person'),
-                'ТЕЛЕФОН: ' + get('phone'),
-                'EMAIL: ' + get('email'),
-                get('other_contacts') ? 'ІНШІ КОНТАКТИ: ' + get('other_contacts') : '',
-                '---',
-                get('business_sphere') ? 'СФЕРА: ' + get('business_sphere') : '',
-                get('product_service') ? 'ПРОДУКТ: ' + get('product_service') : '',
-                get('usp') ? 'УТП: ' + get('usp') : '',
-                get('geography') ? 'ГЕОГРАФІЯ: ' + get('geography') : '',
-                get('current_website') ? 'САЙТ: ' + get('current_website') : '',
-                '---',
-                get('problem_solving') ? 'ПРОБЛЕМА ЦА: ' + get('problem_solving') : '',
-                get('gender_ratio') ? 'СТАТЬ: ' + get('gender_ratio') : '',
-                get('age_ratio') ? 'ВІК: ' + get('age_ratio') : '',
-                get('target_interests') ? 'ІНТЕРЕСИ: ' + get('target_interests') : '',
-                '---',
-                get('site_goals') ? 'ЦІЛІ: ' + get('site_goals') : '',
-                get('style_preferences') ? 'СТИЛЬ: ' + get('style_preferences') : '',
-                get('color_scheme') ? 'КОЛЬОРИ: ' + get('color_scheme') : '',
-                get('technical_aspects') ? 'ТЕХНІЧНІ АСПЕКТИ: ' + get('technical_aspects') : '',
-                '---',
-                get('competitor_link') ? 'КОНКУРЕНТ: ' + get('competitor_link') : '',
-                get('competitor_likes') ? 'ПОДОБАЄТЬСЯ: ' + get('competitor_likes') : '',
-                get('competitor_dislikes') ? 'НЕ ПОДОБАЄТЬСЯ: ' + get('competitor_dislikes') : '',
-                '---',
-                'МОВИ: ' + langs,
-                get('shop_status') === 'yes' ? 'МАГАЗИН: Так' + (get('shop_comment') ? ' — ' + get('shop_comment') : '') : '',
-                get('crm_status') === 'yes' ? 'CRM: Так' + (get('crm_comment') ? ' — ' + get('crm_comment') : '') : '',
-                get('payments_status') === 'yes' ? 'ПЛАТЕЖІ: Так' + (get('payments_comment') ? ' — ' + get('payments_comment') : '') : '',
-                '---',
-                get('additional_notes') ? 'ПРИМІТКИ: ' + get('additional_notes') : '',
-                get('utm_source') ? 'UTM: ' + get('utm_source') + ' / ' + get('utm_medium') : '',
-            ].filter(Boolean).join('\n'));
-
-            const res = await fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                headers: { 'Accept': 'application/json' },
-                body: sendData
-            });
-
-            const result = await res.json();
-            console.log('Web3Forms:', result);
-
-            if (result.success) {
-                showSuccess();
-            } else {
-                console.error('Failed:', result.message);
-                showSuccess();
-            }
         } catch (err) {
-            console.error('Submit error:', err);
+            console.error('EmailJS error:', err);
             showSuccess();
         } finally {
             btn.textContent = '🚀 Відправити та зберегти PDF';
