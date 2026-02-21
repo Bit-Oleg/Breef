@@ -154,6 +154,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr><td colspan="2" style="padding:16px 12px 6px;background:#5E0B15;color:#F5F5F3;font-size:13px;font-weight:700;letter-spacing:0.05em">${title}</td></tr>
                 ${rows}`;
 
+            const fetchOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                },
+            };
+
             const htmlMessage = `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -248,6 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
 </html>`;
 
                         params.set('html', htmlMessage);
+
+            // Відправляємо на ключ 2 з HTML листом
+            params.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
 
             const res = await fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params.toString() });
             const result = await res.json();
