@@ -157,110 +157,64 @@ document.addEventListener('DOMContentLoaded', () => {
             const fetchOptions = {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept': 'application/json'
                 },
             };
 
-            const htmlMessage = `<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#F5F5F3;font-family:Arial,sans-serif">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#F5F5F3;padding:24px 0">
-<tr><td>
-<table width="600" align="center" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #DFDFDF;max-width:600px">
+            // Відправляємо всі дані як FormData
+            const sendData = new FormData();
+            sendData.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
+            sendData.set('subject', 'Новий бриф на UX/UI дизайн');
+            sendData.set('from_name', 'Бриф сайт');
 
-  <tr><td style="background:#5E0B15;padding:24px;text-align:center">
-    <h1 style="margin:0;color:#F5F5F3;font-size:20px;font-weight:700">БРИФ на UX/UI дизайн</h1>
-    <p style="margin:6px 0 0;color:#9E7C80;font-size:12px">${new Date().toLocaleDateString('uk-UA')}</p>
-  </td></tr>
+            // Всі текстові поля форми
+            for (const [k, v] of new FormData(form).entries()) {
+                if (typeof v === 'string') sendData.set(k, v);
+            }
 
-  <tr><td style="padding:0 24px 24px">
-    <table width="100%" cellpadding="0" cellspacing="0">
+            // Зручний текстовий summary
+            sendData.set('message', [
+                'КОМПАНІЯ: ' + get('company'),
+                'КОНТАКТ: ' + get('contact_person'),
+                'ТЕЛЕФОН: ' + get('phone'),
+                'EMAIL: ' + get('email'),
+                get('other_contacts') ? 'ІНШІ КОНТАКТИ: ' + get('other_contacts') : '',
+                '---',
+                get('business_sphere') ? 'СФЕРА: ' + get('business_sphere') : '',
+                get('product_service') ? 'ПРОДУКТ: ' + get('product_service') : '',
+                get('usp') ? 'УТП: ' + get('usp') : '',
+                get('geography') ? 'ГЕОГРАФІЯ: ' + get('geography') : '',
+                get('current_website') ? 'САЙТ: ' + get('current_website') : '',
+                '---',
+                get('problem_solving') ? 'ПРОБЛЕМА ЦА: ' + get('problem_solving') : '',
+                get('gender_ratio') ? 'СТАТЬ: ' + get('gender_ratio') : '',
+                get('age_ratio') ? 'ВІК: ' + get('age_ratio') : '',
+                get('target_interests') ? 'ІНТЕРЕСИ: ' + get('target_interests') : '',
+                '---',
+                get('site_goals') ? 'ЦІЛІ: ' + get('site_goals') : '',
+                get('style_preferences') ? 'СТИЛЬ: ' + get('style_preferences') : '',
+                get('color_scheme') ? 'КОЛЬОРИ: ' + get('color_scheme') : '',
+                get('technical_aspects') ? 'ТЕХНІЧНІ АСПЕКТИ: ' + get('technical_aspects') : '',
+                '---',
+                get('competitor_link') ? 'КОНКУРЕНТ: ' + get('competitor_link') : '',
+                get('competitor_likes') ? 'ПОДОБАЄТЬСЯ: ' + get('competitor_likes') : '',
+                get('competitor_dislikes') ? 'НЕ ПОДОБАЄТЬСЯ: ' + get('competitor_dislikes') : '',
+                '---',
+                'МОВИ: ' + langs,
+                get('shop_status') === 'yes' ? 'МАГАЗИН: Так' + (get('shop_comment') ? ' — ' + get('shop_comment') : '') : '',
+                get('crm_status') === 'yes' ? 'CRM: Так' + (get('crm_comment') ? ' — ' + get('crm_comment') : '') : '',
+                get('payments_status') === 'yes' ? 'ПЛАТЕЖІ: Так' + (get('payments_comment') ? ' — ' + get('payments_comment') : '') : '',
+                '---',
+                get('additional_notes') ? 'ПРИМІТКИ: ' + get('additional_notes') : '',
+                get('utm_source') ? 'UTM: ' + get('utm_source') + ' / ' + get('utm_medium') : '',
+            ].filter(Boolean).join('\n'));
 
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
-        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Контакти</span>
-      </td></tr>
-      ${get('company') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Компанія</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('company')}</td></tr>` : ''}
-      ${get('contact_person') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Контактна особа</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('contact_person')}</td></tr>` : ''}
-      ${get('phone') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Телефон</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('phone')}</td></tr>` : ''}
-      ${get('email') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Email</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('email')}</td></tr>` : ''}
-      ${get('other_contacts') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Інші контакти</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('other_contacts')}</td></tr>` : ''}
+            const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: sendData
+            });
 
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
-        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Про компанію</span>
-      </td></tr>
-      ${get('business_sphere') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Сфера</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('business_sphere')}</td></tr>` : ''}
-      ${get('product_service') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Продукт</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('product_service')}</td></tr>` : ''}
-      ${get('usp') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">УТП</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('usp')}</td></tr>` : ''}
-      ${get('geography') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Географія</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('geography')}</td></tr>` : ''}
-      ${get('current_website') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Сайт</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('current_website')}</td></tr>` : ''}
-      ${get('social_media') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Соцмережі</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('social_media')}</td></tr>` : ''}
-
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
-        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Цільова аудиторія</span>
-      </td></tr>
-      ${get('problem_solving') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Проблема</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('problem_solving')}</td></tr>` : ''}
-      ${get('gender_ratio') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Стать</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('gender_ratio')}</td></tr>` : ''}
-      ${get('age_ratio') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Вік</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('age_ratio')}</td></tr>` : ''}
-      ${get('target_interests') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Інтереси</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('target_interests')}</td></tr>` : ''}
-
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
-        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Бачення дизайну</span>
-      </td></tr>
-      ${get('site_goals') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Цілі</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('site_goals')}</td></tr>` : ''}
-      ${get('user_action') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Дія</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('user_action')}</td></tr>` : ''}
-      ${get('style_preferences') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Стилістика</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('style_preferences')}</td></tr>` : ''}
-      ${get('color_scheme') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Кольори</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('color_scheme')}</td></tr>` : ''}
-      ${get('technical_aspects') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Технічні аспекти</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('technical_aspects')}</td></tr>` : ''}
-
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
-        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Конкуренти</span>
-      </td></tr>
-      ${get('competitor_link') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Посилання</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('competitor_link')}</td></tr>` : ''}
-      ${get('competitor_likes') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Подобається</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('competitor_likes')}</td></tr>` : ''}
-      ${get('competitor_dislikes') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Не подобається</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('competitor_dislikes')}</td></tr>` : ''}
-
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
-        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Модулі та мови</span>
-      </td></tr>
-      <tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Мови</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${langs}</td></tr>
-      ${get('shop_status') === 'yes' ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Магазин</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">Так ${get('shop_comment') ? '— ' + get('shop_comment') : ''}</td></tr>` : ''}
-      ${get('crm_status') === 'yes' ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">CRM</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">Так ${get('crm_comment') ? '— ' + get('crm_comment') : ''}</td></tr>` : ''}
-      ${get('payments_status') === 'yes' ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Платежі</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">Так ${get('payments_comment') ? '— ' + get('payments_comment') : ''}</td></tr>` : ''}
-
-      ${get('additional_notes') ? `
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
-        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Примітки</span>
-      </td></tr>
-      <tr><td colspan="2" style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('additional_notes')}</td></tr>` : ''}
-
-      ${get('utm_source') ? `
-      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #DFDFDF">
-        <span style="font-size:12px;font-weight:700;color:#9E7C80;text-transform:uppercase">Джерело</span>
-      </td></tr>
-      <tr><td style="padding:6px 0;color:#9E7C80;font-size:12px;width:40%">utm_source</td><td style="padding:6px 0;color:#1F1F1F;font-size:12px">${get('utm_source')} / ${get('utm_medium')}</td></tr>` : ''}
-
-    </table>
-  </td></tr>
-
-  <tr><td style="background:#1F1F1F;padding:16px 24px;text-align:center">
-    <p style="margin:0;color:#9E7C80;font-size:11px">Бриф отримано автоматично</p>
-    <p style="margin:4px 0 0;color:#DFDFDF;font-size:11px">Валентина Окорешко</p>
-  </td></tr>
-
-</table>
-</td></tr>
-</table>
-</body>
-</html>`;
-
-                        params.set('html', htmlMessage);
-
-            // Відправляємо на ключ 2 з HTML листом
-            params.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
-
-            const res = await fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params.toString() });
             const result = await res.json();
             console.log('Web3Forms:', result);
 
