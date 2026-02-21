@@ -250,7 +250,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </div>`;
 
-            params.set('message', htmlMessage);
+            // Простий текстовий лист (обходить спам-фільтр)
+            const textMessage = [
+                '=== КОНТАКТИ ===',
+                'Компанія: ' + get('company'),
+                'Контактна особа: ' + get('contact_person'),
+                'Телефон: ' + get('phone'),
+                'Email: ' + get('email'),
+                get('other_contacts') ? 'Інші контакти: ' + get('other_contacts') : '',
+                '',
+                '=== ПРО КОМПАНІЮ ===',
+                get('business_sphere') ? 'Сфера: ' + get('business_sphere') : '',
+                get('product_service') ? 'Продукт: ' + get('product_service') : '',
+                get('usp') ? 'УТП: ' + get('usp') : '',
+                get('geography') ? 'Географія: ' + get('geography') : '',
+                get('current_website') ? 'Сайт: ' + get('current_website') : '',
+                '',
+                '=== ЦІЛЬОВА АУДИТОРІЯ ===',
+                get('gender_ratio') ? 'Стать: ' + get('gender_ratio') : '',
+                get('age_ratio') ? 'Вік: ' + get('age_ratio') : '',
+                get('target_interests') ? 'Інтереси: ' + get('target_interests') : '',
+                '',
+                '=== БАЧЕННЯ ДИЗАЙНУ ===',
+                get('site_goals') ? 'Цілі: ' + get('site_goals') : '',
+                get('style_preferences') ? 'Стилістика: ' + get('style_preferences') : '',
+                get('color_scheme') ? 'Кольори: ' + get('color_scheme') : '',
+                '',
+                '=== КОНКУРЕНТИ ===',
+                get('competitor_link') ? 'Посилання: ' + get('competitor_link') : '',
+                get('competitor_likes') ? 'Подобається: ' + get('competitor_likes') : '',
+                get('competitor_dislikes') ? 'Не подобається: ' + get('competitor_dislikes') : '',
+                '',
+                '=== МОДУЛІ ===',
+                'Пошук: ' + get('search_status'),
+                'Блог: ' + get('blog_status'),
+                'Магазин: ' + get('shop_status'),
+                'CRM: ' + get('crm_status'),
+                'Мови: ' + langs,
+                '',
+                get('additional_notes') ? '=== ПРИМІТКИ ===\n' + get('additional_notes') : '',
+                get('utm_source') ? '\n=== UTM ===\nДжерело: ' + get('utm_source') + ' / ' + get('utm_medium') : '',
+            ].filter(Boolean).join('\n');
+
+            params.set('message', textMessage);
 
             const fetchOptions = {
                 method: 'POST',
@@ -260,23 +302,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
             };
 
-            // Відправляємо на обидва акаунти паралельно
-            const params2 = new URLSearchParams(params.toString());
-            params2.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
+            // Відправляємо тільки на ключ 2 з HTML листом
+            params.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
+            params.set('message', htmlMessage);
 
-            const [res1, res2] = await Promise.all([
-                fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params.toString() }),
-                fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params2.toString() }),
-            ]);
+            const res = await fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params.toString() });
+            const result = await res.json();
+            console.log('Web3Forms:', result);
 
-            const [result1, result2] = await Promise.all([res1.json(), res2.json()]);
-            console.log('Web3Forms #1:', result1);
-            console.log('Web3Forms #2:', result2);
-
-            if (result1.success || result2.success) {
+            if (result.success) {
                 showSuccess();
             } else {
-                console.error('Both failed:', result1.message, result2.message);
+                console.error('Failed:', result.message);
                 showSuccess();
             }
         } catch (err) {
