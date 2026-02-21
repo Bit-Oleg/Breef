@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Завантажуємо EmailJS
             await loadScript('https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js');
-            emailjs.init('s4yypLB79jR80UOtA');
+            emailjs.init('s4yypLB79jR8OUOtA');
 
             const templateParams = {
                 company:             getF('company'),
