@@ -154,157 +154,100 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr><td colspan="2" style="padding:16px 12px 6px;background:#5E0B15;color:#F5F5F3;font-size:13px;font-weight:700;letter-spacing:0.05em">${title}</td></tr>
                 ${rows}`;
 
-            const htmlMessage = `
-<div style="font-family:Inter,Arial,sans-serif;max-width:640px;margin:0 auto;background:#F5F5F3;border-radius:12px;overflow:hidden;border:1px solid #DFDFDF">
+            const htmlMessage = `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#F5F5F3;font-family:Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#F5F5F3;padding:24px 0">
+<tr><td>
+<table width="600" align="center" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #DFDFDF;max-width:600px">
 
-  <!-- HEADER -->
-  <div style="background:#5E0B15;padding:32px 24px;text-align:center">
-    <div style="font-size:28px;margin-bottom:8px">📝</div>
-    <h1 style="margin:0;color:#F5F5F3;font-size:22px;font-weight:800;letter-spacing:-0.02em">БРИФ на UX/UI дизайн</h1>
-    <p style="margin:8px 0 0;color:#9E7C80;font-size:13px">${new Date().toLocaleDateString('uk-UA', {day:'numeric',month:'long',year:'numeric'})}</p>
-  </div>
+  <tr><td style="background:#5E0B15;padding:24px;text-align:center">
+    <h1 style="margin:0;color:#F5F5F3;font-size:20px;font-weight:700">БРИФ на UX/UI дизайн</h1>
+    <p style="margin:6px 0 0;color:#9E7C80;font-size:12px">${new Date().toLocaleDateString('uk-UA')}</p>
+  </td></tr>
 
-  <!-- BODY -->
-  <div style="padding:0 24px 24px">
-    <table style="width:100%;border-collapse:collapse;margin-top:16px">
+  <tr><td style="padding:0 24px 24px">
+    <table width="100%" cellpadding="0" cellspacing="0">
 
-      \${section('💡 1. КОНТАКТНА ІНФОРМАЦІЯ', [
-        row('Компанія', get('company')),
-        row('Контактна особа', get('contact_person')),
-        row('Телефон', get('phone')),
-        row('E-mail', get('email')),
-        row('Інші контакти', get('other_contacts')),
-      ].join(''))}
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
+        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Контакти</span>
+      </td></tr>
+      ${get('company') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Компанія</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('company')}</td></tr>` : ''}
+      ${get('contact_person') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Контактна особа</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('contact_person')}</td></tr>` : ''}
+      ${get('phone') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Телефон</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('phone')}</td></tr>` : ''}
+      ${get('email') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Email</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px;font-weight:600">${get('email')}</td></tr>` : ''}
+      ${get('other_contacts') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Інші контакти</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('other_contacts')}</td></tr>` : ''}
 
-      \${section('💡 2. ПРО КОМПАНІЮ', [
-        row('Сфера діяльності', get('business_sphere')),
-        row('Продукт / послуга', get('product_service')),
-        row('Опис продукту', get('product_description')),
-        row('УТП', get('usp')),
-        row('Географія', get('geography')),
-        row('Поточний сайт', get('current_website')),
-        row('Соціальні мережі', get('social_media')),
-        row('Ключові запити', get('keywords')),
-      ].join(''))}
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
+        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Про компанію</span>
+      </td></tr>
+      ${get('business_sphere') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Сфера</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('business_sphere')}</td></tr>` : ''}
+      ${get('product_service') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Продукт</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('product_service')}</td></tr>` : ''}
+      ${get('usp') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">УТП</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('usp')}</td></tr>` : ''}
+      ${get('geography') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Географія</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('geography')}</td></tr>` : ''}
+      ${get('current_website') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Сайт</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('current_website')}</td></tr>` : ''}
+      ${get('social_media') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Соцмережі</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('social_media')}</td></tr>` : ''}
 
-      \${section('💡 3. ЦІЛЬОВА АУДИТОРІЯ', [
-        row('Проблема продукту', get('problem_solving')),
-        row('Стать', get('gender_ratio')),
-        row('Вік', get('age_ratio')),
-        row('Фінансовий стан', get('financial_status')),
-        row('Інтереси', get('target_interests')),
-      ].join(''))}
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
+        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Цільова аудиторія</span>
+      </td></tr>
+      ${get('problem_solving') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Проблема</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('problem_solving')}</td></tr>` : ''}
+      ${get('gender_ratio') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Стать</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('gender_ratio')}</td></tr>` : ''}
+      ${get('age_ratio') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Вік</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('age_ratio')}</td></tr>` : ''}
+      ${get('target_interests') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Інтереси</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('target_interests')}</td></tr>` : ''}
 
-      \${section('💡 4. БАЧЕННЯ ДИЗАЙНУ', [
-        row('Цілі дизайну', get('site_goals')),
-        row('Дія користувача', get('user_action')),
-        row('Стилістика', get('style_preferences')),
-        row('Кольорова гама', get('color_scheme')),
-        row('Обов\'язкові розділи', sections),
-        row('Технічні аспекти', get('technical_aspects')),
-      ].join(''))}
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
+        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Бачення дизайну</span>
+      </td></tr>
+      ${get('site_goals') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Цілі</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('site_goals')}</td></tr>` : ''}
+      ${get('user_action') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Дія</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('user_action')}</td></tr>` : ''}
+      ${get('style_preferences') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Стилістика</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('style_preferences')}</td></tr>` : ''}
+      ${get('color_scheme') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Кольори</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('color_scheme')}</td></tr>` : ''}
+      ${get('technical_aspects') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Технічні аспекти</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('technical_aspects')}</td></tr>` : ''}
 
-      \${section('💡 5. КОНКУРЕНТИ', [
-        row('Посилання', get('competitor_link')),
-        row('Що подобається', get('competitor_likes')),
-        row('Що не подобається', get('competitor_dislikes')),
-      ].join(''))}
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
+        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Конкуренти</span>
+      </td></tr>
+      ${get('competitor_link') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Посилання</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('competitor_link')}</td></tr>` : ''}
+      ${get('competitor_likes') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Подобається</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('competitor_likes')}</td></tr>` : ''}
+      ${get('competitor_dislikes') ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Не подобається</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('competitor_dislikes')}</td></tr>` : ''}
 
-      \${section('💡 6. МАТЕРІАЛИ', [
-        row('Наявні матеріали', materials),
-        row('Хто надає контент', get('content_owner')),
-      ].join(''))}
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
+        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Модулі та мови</span>
+      </td></tr>
+      <tr><td style="padding:8px 0;color:#9E7C80;font-size:13px;width:40%">Мови</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">${langs}</td></tr>
+      ${get('shop_status') === 'yes' ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Магазин</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">Так ${get('shop_comment') ? '— ' + get('shop_comment') : ''}</td></tr>` : ''}
+      ${get('crm_status') === 'yes' ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">CRM</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">Так ${get('crm_comment') ? '— ' + get('crm_comment') : ''}</td></tr>` : ''}
+      ${get('payments_status') === 'yes' ? `<tr><td style="padding:8px 0;color:#9E7C80;font-size:13px">Платежі</td><td style="padding:8px 0;color:#1F1F1F;font-size:13px">Так ${get('payments_comment') ? '— ' + get('payments_comment') : ''}</td></tr>` : ''}
 
-      \${section('💡 7. ФУНКЦІОНАЛЬНІ МОДУЛІ', [
-        row('Пошук', get('search_status')),
-        row('Підписка', get('subscribe_status')),
-        row('Блог', get('blog_status')),
-        row('Магазин', get('shop_status')),
-        row('CRM інтеграція', get('crm_status')),
-        row('Платежі', get('payments_status')),
-        row('Доставка', get('delivery_status')),
-        row('Аналітика', get('analytics_status')),
-        row('Мови', langs),
-        row('Інші мови', get('lang_other')),
-      ].join(''))}
+      ${get('additional_notes') ? `
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #5E0B15">
+        <span style="font-size:13px;font-weight:700;color:#5E0B15;text-transform:uppercase">Примітки</span>
+      </td></tr>
+      <tr><td colspan="2" style="padding:8px 0;color:#1F1F1F;font-size:13px">${get('additional_notes')}</td></tr>` : ''}
 
-      \${section('💡 8. ПРИМІТКИ', [
-        row('Додаткові побажання', get('additional_notes')),
-      ].join(''))}
-
-      \${get('utm_source') ? section('📊 UTM / ДЖЕРЕЛО', [
-        row('Джерело (utm_source)', get('utm_source')),
-        row('Канал (utm_medium)', get('utm_medium')),
-        row('Кампанія (utm_campaign)', get('utm_campaign')),
-        row('Referrer', get('referrer')),
-      ].join('')) : ''}
+      ${get('utm_source') ? `
+      <tr><td colspan="2" style="padding:20px 0 8px;border-bottom:2px solid #DFDFDF">
+        <span style="font-size:12px;font-weight:700;color:#9E7C80;text-transform:uppercase">Джерело</span>
+      </td></tr>
+      <tr><td style="padding:6px 0;color:#9E7C80;font-size:12px;width:40%">utm_source</td><td style="padding:6px 0;color:#1F1F1F;font-size:12px">${get('utm_source')} / ${get('utm_medium')}</td></tr>` : ''}
 
     </table>
-  </div>
+  </td></tr>
 
-  <!-- FOOTER -->
-  <div style="background:#1F1F1F;padding:20px 24px;text-align:center">
-    <p style="margin:0;color:#9E7C80;font-size:12px">Бриф отримано автоматично · brief-site.vercel.app</p>
-    <p style="margin:6px 0 0;color:#DFDFDF;font-size:12px">Валентина Окорешко · <a href="https://t.me/okoreshko88" style="color:#9E7C80">@okoreshko88</a></p>
-  </div>
+  <tr><td style="background:#1F1F1F;padding:16px 24px;text-align:center">
+    <p style="margin:0;color:#9E7C80;font-size:11px">Бриф отримано автоматично</p>
+    <p style="margin:4px 0 0;color:#DFDFDF;font-size:11px">Валентина Окорешко</p>
+  </td></tr>
 
-</div>`;
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
 
-            // Простий текстовий лист (обходить спам-фільтр)
-            const textMessage = [
-                '=== КОНТАКТИ ===',
-                'Компанія: ' + get('company'),
-                'Контактна особа: ' + get('contact_person'),
-                'Телефон: ' + get('phone'),
-                'Email: ' + get('email'),
-                get('other_contacts') ? 'Інші контакти: ' + get('other_contacts') : '',
-                '',
-                '=== ПРО КОМПАНІЮ ===',
-                get('business_sphere') ? 'Сфера: ' + get('business_sphere') : '',
-                get('product_service') ? 'Продукт: ' + get('product_service') : '',
-                get('usp') ? 'УТП: ' + get('usp') : '',
-                get('geography') ? 'Географія: ' + get('geography') : '',
-                get('current_website') ? 'Сайт: ' + get('current_website') : '',
-                '',
-                '=== ЦІЛЬОВА АУДИТОРІЯ ===',
-                get('gender_ratio') ? 'Стать: ' + get('gender_ratio') : '',
-                get('age_ratio') ? 'Вік: ' + get('age_ratio') : '',
-                get('target_interests') ? 'Інтереси: ' + get('target_interests') : '',
-                '',
-                '=== БАЧЕННЯ ДИЗАЙНУ ===',
-                get('site_goals') ? 'Цілі: ' + get('site_goals') : '',
-                get('style_preferences') ? 'Стилістика: ' + get('style_preferences') : '',
-                get('color_scheme') ? 'Кольори: ' + get('color_scheme') : '',
-                '',
-                '=== КОНКУРЕНТИ ===',
-                get('competitor_link') ? 'Посилання: ' + get('competitor_link') : '',
-                get('competitor_likes') ? 'Подобається: ' + get('competitor_likes') : '',
-                get('competitor_dislikes') ? 'Не подобається: ' + get('competitor_dislikes') : '',
-                '',
-                '=== МОДУЛІ ===',
-                'Пошук: ' + get('search_status'),
-                'Блог: ' + get('blog_status'),
-                'Магазин: ' + get('shop_status'),
-                'CRM: ' + get('crm_status'),
-                'Мови: ' + langs,
-                '',
-                get('additional_notes') ? '=== ПРИМІТКИ ===\n' + get('additional_notes') : '',
-                get('utm_source') ? '\n=== UTM ===\nДжерело: ' + get('utm_source') + ' / ' + get('utm_medium') : '',
-            ].filter(Boolean).join('\n');
-
-            params.set('message', textMessage);
-
-            const fetchOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                },
-            };
-
-            // Відправляємо тільки на ключ 2 з HTML листом
-            params.set('access_key', '954415f0-cf4f-449c-8da9-507f336eada6');
-            params.set('message', htmlMessage);
+                        params.set('html', htmlMessage);
 
             const res = await fetch('https://api.web3forms.com/submit', { ...fetchOptions, body: params.toString() });
             const result = await res.json();
