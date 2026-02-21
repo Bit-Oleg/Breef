@@ -16,51 +16,46 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* ПРОГРЕС-БАР */
-        .progress-wrap{position:sticky;top:0;z-index:100;background:white;padding:.6rem 1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+        .progress-wrap{position:sticky;top:0;z-index:100;background:#F5F5F3;padding:.6rem 1.5rem;box-shadow:0 2px 8px rgba(31,31,31,.08);border-bottom:1px solid #DFDFDF;}
         .progress-inner{max-width:48rem;margin:0 auto;}
-        .progress-label{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;color:#64748b;margin-bottom:5px;}
-        .progress-track{background:#e2e8f0;border-radius:9999px;height:5px;overflow:hidden;}
-        .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:9999px;transition:width .4s ease;}
+        .progress-label{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;color:#9E7C80;margin-bottom:5px;}
+        .progress-track{background:#DFDFDF;border-radius:9999px;height:5px;overflow:hidden;}
+        .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#5E0B15,#9E7C80);border-radius:9999px;transition:width .4s ease;}
 
         /* ОБОВ ЯЗКОВІ */
-        label .req{color:#ef4444;margin-left:2px;}
-        input.invalid,textarea.invalid{border-color:#ef4444!important;background:#fff5f5!important;}
-        .field-error{color:#ef4444;font-size:.78rem;margin-top:-.6rem;margin-bottom:.75rem;display:none;}
+        label .req{color:#5E0B15;margin-left:2px;}
+        input.invalid,textarea.invalid{border-color:#5E0B15!important;background:#fff5f5!important;}
+        .field-error{color:#5E0B15;font-size:.78rem;margin-top:-.6rem;margin-bottom:.75rem;display:none;}
         .field-error.show{display:block;}
 
         /* ПІДКАЗКИ */
-        .hint{display:inline-block;width:16px;height:16px;background:#e2e8f0;border-radius:50%;font-size:.68rem;font-weight:700;color:#64748b;text-align:center;line-height:16px;cursor:pointer;position:relative;margin-left:5px;vertical-align:middle;}
-        .hint:hover::after{content:attr(data-tip);position:absolute;left:22px;top:-4px;background:#1e293b;color:white;font-size:.73rem;font-weight:400;padding:.5rem .75rem;border-radius:.5rem;width:210px;white-space:normal;line-height:1.45;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+        .hint{display:inline-block;width:16px;height:16px;background:#DFDFDF;border-radius:50%;font-size:.68rem;font-weight:700;color:#9E7C80;text-align:center;line-height:16px;cursor:pointer;position:relative;margin-left:5px;vertical-align:middle;}
+        .hint:hover::after{content:attr(data-tip);position:absolute;left:22px;top:-4px;background:#1F1F1F;color:#F5F5F3;font-size:.73rem;font-weight:400;padding:.5rem .75rem;border-radius:.5rem;width:210px;white-space:normal;line-height:1.45;z-index:200;box-shadow:0 4px 12px rgba(31,31,31,.25);}
 
         /* CHECKBOXES */
         .checkbox-group label{display:flex;align-items:center;gap:8px;font-weight:400;margin-bottom:6px;cursor:pointer;}
         .material-item{margin-bottom:1.25rem;}
         .module-group{margin-bottom:1.25rem;}
 
-        /* БЮДЖЕТ */
-        .budget-display{font-size:1.1rem;font-weight:700;color:#2563eb;margin-bottom:8px;}
-        input[type="range"]{width:100%;accent-color:#2563eb;cursor:pointer;margin-bottom:4px;}
-        .budget-labels{display:flex;justify-content:space-between;font-size:.73rem;color:#94a3b8;margin-bottom:1rem;}
-
         /* ЛІЧИЛЬНИК ФАЙЛІВ */
-        .file-counter{display:inline-flex;align-items:center;gap:6px;background:#eff6ff;color:#2563eb;font-size:.8rem;font-weight:600;padding:.3rem .7rem;border-radius:9999px;margin-left:8px;display:none;}
+        .file-counter{display:inline-flex;align-items:center;gap:6px;background:#DFDFDF;color:#5E0B15;font-size:.8rem;font-weight:600;padding:.3rem .7rem;border-radius:9999px;margin-left:8px;display:none;}
         .file-counter.show{display:inline-flex;}
 
         /* SUCCESS OVERLAY */
-        .success-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(10px);z-index:9999;align-items:center;justify-content:center;padding:1rem;}
+        .success-overlay{display:none;position:fixed;inset:0;background:rgba(31,31,31,.7);backdrop-filter:blur(10px);z-index:9999;align-items:center;justify-content:center;padding:1rem;}
         .success-overlay.show{display:flex;}
-        .success-card{background:white;border-radius:1.75rem;padding:2.5rem 2rem 2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.22);animation:popIn .45s cubic-bezier(.34,1.56,.64,1);}
+        .success-card{background:#F5F5F3;border-radius:1.75rem;padding:2.5rem 2rem 2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(31,31,31,.3);animation:popIn .45s cubic-bezier(.34,1.56,.64,1);border:1px solid #DFDFDF;}
         @keyframes popIn{from{opacity:0;transform:scale(.8) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
-        .success-icon-wrap{width:76px;height:76px;background:linear-gradient(135deg,#10b981,#059669);border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:2.1rem;box-shadow:0 8px 28px rgba(16,185,129,.38);}
-        .success-card h2{font-size:1.45rem;font-weight:800;color:#0f172a;margin:0 0 .45rem;}
-        .success-sub{color:#64748b;font-size:.92rem;margin:0 0 .25rem;line-height:1.55;}
-        .success-email-note{display:inline-flex;align-items:center;gap:6px;background:#eff6ff;color:#2563eb;font-size:.82rem;font-weight:600;padding:.4rem .9rem;border-radius:9999px;margin:.75rem 0 1.75rem;}
+        .success-icon-wrap{width:76px;height:76px;background:linear-gradient(135deg,#5E0B15,#9E7C80);border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:2.1rem;box-shadow:0 8px 28px rgba(94,11,21,.35);}
+        .success-card h2{font-size:1.45rem;font-weight:800;color:#1F1F1F;margin:0 0 .45rem;}
+        .success-sub{color:#9E7C80;font-size:.92rem;margin:0 0 .25rem;line-height:1.55;}
+        .success-email-note{display:inline-flex;align-items:center;gap:6px;background:#DFDFDF;color:#5E0B15;font-size:.82rem;font-weight:600;padding:.4rem .9rem;border-radius:9999px;margin:.75rem 0 1.75rem;}
         .success-actions{display:flex;flex-direction:column;gap:.7rem;}
-        .btn-pdf{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;border:none;padding:.9rem 1.5rem;border-radius:.85rem;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 6px 20px rgba(37,99,235,.35);display:flex;align-items:center;justify-content:center;gap:8px;}
-        .btn-pdf:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.42);}
+        .btn-pdf{background:linear-gradient(135deg,#5E0B15,#7a0f1c);color:#F5F5F3;border:none;padding:.9rem 1.5rem;border-radius:.85rem;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 6px 20px rgba(94,11,21,.35);display:flex;align-items:center;justify-content:center;gap:8px;}
+        .btn-pdf:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(94,11,21,.45);}
         .btn-pdf:disabled{opacity:.65;cursor:not-allowed;transform:none;}
-        .btn-close-success{background:#f1f5f9;color:#475569;border:none;padding:.7rem 1.5rem;border-radius:.85rem;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s;}
-        .btn-close-success:hover{background:#e2e8f0;}
+        .btn-close-success{background:#DFDFDF;color:#1F1F1F;border:none;padding:.7rem 1.5rem;border-radius:.85rem;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s;}
+        .btn-close-success:hover{background:#9E7C80;color:white;}
     </style>
 </head>
 <body>
@@ -89,8 +84,7 @@
     <input type="hidden" name="access_key" value="bea45c28-7de8-42c9-a088-57dbc283d3db">
     <input type="hidden" name="subject" value="Новий бриф на UX/UI дизайн">
     <input type="hidden" name="from_name" value="Бриф сайт">
-    <!-- Додаткова пошта для копії листа — замініть на потрібну -->
-    <input type="hidden" name="cc" value="okoreshko88@gmail.com">
+    <input type="hidden" name="replyto" value="okoreshko88@gmail.com">
     <input type="hidden" name="redirect" value="false">
     <p style="display:none;"><label>Bot field: <input name="botcheck" style="display:none"></label></p>
 
@@ -363,7 +357,7 @@
         <textarea id="additional_notes" name="additional_notes" rows="6" placeholder="Ваші побажання..."></textarea>
     </fieldset>
 
-    <button type="submit" class="submit-btn" id="submit-btn">&#x1F680; Відправити бриф</button>
+    <button type="submit" class="submit-btn" id="submit-btn">&#x1F680; Відправити та зберегти PDF</button>
   </form>
 
     <footer>
@@ -373,7 +367,7 @@
             <div class="footer-socials">
                 <a href="https://t.me/okoreshko88" target="_blank" class="social-link">Telegram</a>
                 <span class="divider">|</span>
-                <a href="mailto:okoreshko88@gmail.com" class="social-link">Email</a>
+                <a href="/cdn-cgi/l/email-protection#88e7e3e7faedfbe0e3e7b0b0c8efe5e9e1e4a6ebe7e5" class="social-link">Email</a>
             </div>
         </div>
     </footer>

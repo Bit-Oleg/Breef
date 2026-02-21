@@ -140,6 +140,118 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Формуємо красивий HTML лист
+            const get = (name) => (formData.get(name) || '').trim();
+            const langs = formData.getAll('lang').join(', ') || '—';
+            const sections = formData.getAll('sections').join(', ') || '—';
+            const materials = formData.getAll('materials').join(', ') || '—';
+
+            const row = (label, value) => value
+                ? `<tr><td style="padding:8px 12px;color:#9E7C80;font-size:13px;width:40%;vertical-align:top;border-bottom:1px solid #f0f0f0">${label}</td><td style="padding:8px 12px;color:#1F1F1F;font-size:13px;vertical-align:top;border-bottom:1px solid #f0f0f0"><strong>${value}</strong></td></tr>`
+                : '';
+
+            const section = (title, rows) => `
+                <tr><td colspan="2" style="padding:16px 12px 6px;background:#5E0B15;color:#F5F5F3;font-size:13px;font-weight:700;letter-spacing:0.05em">${title}</td></tr>
+                ${rows}`;
+
+            const htmlMessage = `
+<div style="font-family:Inter,Arial,sans-serif;max-width:640px;margin:0 auto;background:#F5F5F3;border-radius:12px;overflow:hidden;border:1px solid #DFDFDF">
+
+  <!-- HEADER -->
+  <div style="background:#5E0B15;padding:32px 24px;text-align:center">
+    <div style="font-size:28px;margin-bottom:8px">📝</div>
+    <h1 style="margin:0;color:#F5F5F3;font-size:22px;font-weight:800;letter-spacing:-0.02em">БРИФ на UX/UI дизайн</h1>
+    <p style="margin:8px 0 0;color:#9E7C80;font-size:13px">${new Date().toLocaleDateString('uk-UA', {day:'numeric',month:'long',year:'numeric'})}</p>
+  </div>
+
+  <!-- BODY -->
+  <div style="padding:0 24px 24px">
+    <table style="width:100%;border-collapse:collapse;margin-top:16px">
+
+      \${section('💡 1. КОНТАКТНА ІНФОРМАЦІЯ', [
+        row('Компанія', get('company')),
+        row('Контактна особа', get('contact_person')),
+        row('Телефон', get('phone')),
+        row('E-mail', get('email')),
+        row('Інші контакти', get('other_contacts')),
+      ].join(''))}
+
+      \${section('💡 2. ПРО КОМПАНІЮ', [
+        row('Сфера діяльності', get('business_sphere')),
+        row('Продукт / послуга', get('product_service')),
+        row('Опис продукту', get('product_description')),
+        row('УТП', get('usp')),
+        row('Географія', get('geography')),
+        row('Поточний сайт', get('current_website')),
+        row('Соціальні мережі', get('social_media')),
+        row('Ключові запити', get('keywords')),
+      ].join(''))}
+
+      \${section('💡 3. ЦІЛЬОВА АУДИТОРІЯ', [
+        row('Проблема продукту', get('problem_solving')),
+        row('Стать', get('gender_ratio')),
+        row('Вік', get('age_ratio')),
+        row('Фінансовий стан', get('financial_status')),
+        row('Інтереси', get('target_interests')),
+      ].join(''))}
+
+      \${section('💡 4. БАЧЕННЯ ДИЗАЙНУ', [
+        row('Цілі дизайну', get('site_goals')),
+        row('Дія користувача', get('user_action')),
+        row('Стилістика', get('style_preferences')),
+        row('Кольорова гама', get('color_scheme')),
+        row('Обов\'язкові розділи', sections),
+        row('Технічні аспекти', get('technical_aspects')),
+      ].join(''))}
+
+      \${section('💡 5. КОНКУРЕНТИ', [
+        row('Посилання', get('competitor_link')),
+        row('Що подобається', get('competitor_likes')),
+        row('Що не подобається', get('competitor_dislikes')),
+      ].join(''))}
+
+      \${section('💡 6. МАТЕРІАЛИ', [
+        row('Наявні матеріали', materials),
+        row('Хто надає контент', get('content_owner')),
+      ].join(''))}
+
+      \${section('💡 7. ФУНКЦІОНАЛЬНІ МОДУЛІ', [
+        row('Пошук', get('search_status')),
+        row('Підписка', get('subscribe_status')),
+        row('Блог', get('blog_status')),
+        row('Магазин', get('shop_status')),
+        row('CRM інтеграція', get('crm_status')),
+        row('Платежі', get('payments_status')),
+        row('Доставка', get('delivery_status')),
+        row('Аналітика', get('analytics_status')),
+        row('Мови', langs),
+        row('Інші мови', get('lang_other')),
+      ].join(''))}
+
+      \${section('💡 8. ПРИМІТКИ', [
+        row('Додаткові побажання', get('additional_notes')),
+      ].join(''))}
+
+      \${get('utm_source') ? section('📊 UTM / ДЖЕРЕЛО', [
+        row('Джерело (utm_source)', get('utm_source')),
+        row('Канал (utm_medium)', get('utm_medium')),
+        row('Кампанія (utm_campaign)', get('utm_campaign')),
+        row('Referrer', get('referrer')),
+      ].join('')) : ''}
+
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:#1F1F1F;padding:20px 24px;text-align:center">
+    <p style="margin:0;color:#9E7C80;font-size:12px">Бриф отримано автоматично · brief-site.vercel.app</p>
+    <p style="margin:6px 0 0;color:#DFDFDF;font-size:12px">Валентина Окорешко · <a href="https://t.me/okoreshko88" style="color:#9E7C80">@okoreshko88</a></p>
+  </div>
+
+</div>`;
+
+            params.set('message', htmlMessage);
+
             const fetchOptions = {
                 method: 'POST',
                 headers: {
