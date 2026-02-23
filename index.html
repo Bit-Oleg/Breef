@@ -14,134 +14,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=block" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* ПРОГРЕС-БАР */
-        .progress-wrap{position:sticky;top:0;z-index:100;background:#F8F5F2;padding:.6rem 1.5rem;box-shadow:0 2px 8px rgba(31,31,31,.08);border-bottom:1px solid #DFDFDF;}
-        .progress-inner{max-width:48rem;margin:0 auto;}
-        .progress-label{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;color:#D689A3;margin-bottom:5px;}
-        .progress-track{background:#DFDFDF;border-radius:9999px;height:5px;overflow:hidden;}
-        .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#420216,#D689A3);border-radius:9999px;transition:width .4s ease;}
+    <link rel="stylesheet" href="layout.css">
 
-        /* ОБОВ ЯЗКОВІ */
-        label .req{color:#420216;margin-left:2px;}
-        input.invalid,textarea.invalid{border-color:#420216!important;background:#fff5f5!important;}
-        .field-error{color:#420216;font-size:.78rem;margin-top:-.6rem;margin-bottom:.75rem;display:none;}
-        .field-error.show{display:block;}
-
-        /* ПІДКАЗКИ */
-        .hint{display:inline-block;width:16px;height:16px;background:#DFDFDF;border-radius:50%;font-size:.68rem;font-weight:700;color:#D689A3;text-align:center;line-height:16px;cursor:pointer;position:relative;margin-left:5px;vertical-align:middle;}
-        .hint:hover::after{content:attr(data-tip);position:absolute;left:22px;top:-4px;background:#150F25;color:#F8F5F2;font-size:.73rem;font-weight:400;padding:.5rem .75rem;border-radius:.5rem;width:210px;white-space:normal;line-height:1.45;z-index:200;box-shadow:0 4px 12px rgba(31,31,31,.25);}
-
-        /* CHECKBOXES */
-        .checkbox-group label{display:flex;align-items:center;gap:8px;font-weight:400;margin-bottom:6px;cursor:pointer;}
-        .material-item{margin-bottom:1.25rem;}
-        .module-group{margin-bottom:1.25rem;}
-
-        /* ЛІЧИЛЬНИК ФАЙЛІВ */
-        .file-counter{display:inline-flex;align-items:center;gap:6px;background:#DFDFDF;color:#420216;font-size:.8rem;font-weight:600;padding:.3rem .7rem;border-radius:9999px;margin-left:8px;display:none;}
-        .file-counter.show{display:inline-flex;}
-
-        /* SUCCESS OVERLAY */
-        .success-overlay{display:none;position:fixed;inset:0;background:rgba(31,31,31,.7);backdrop-filter:blur(10px);z-index:9999;align-items:center;justify-content:center;padding:1rem;}
-        .success-overlay.show{display:flex;}
-        .success-card{background:#F8F5F2;border-radius:1.75rem;padding:2.5rem 2rem 2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(31,31,31,.3);animation:popIn .45s cubic-bezier(.34,1.56,.64,1);border:1px solid #DFDFDF;}
-        @keyframes popIn{from{opacity:0;transform:scale(.8) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
-        .success-icon-wrap{width:76px;height:76px;background:linear-gradient(135deg,#420216,#D689A3);border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:2.1rem;box-shadow:0 8px 28px rgba(94,11,21,.35);}
-        .success-card h2{font-size:1.45rem;font-weight:800;color:#150F25;margin:0 0 .45rem;}
-        .success-sub{color:#D689A3;font-size:.92rem;margin:0 0 .25rem;line-height:1.55;}
-        .success-email-note{display:inline-flex;align-items:center;gap:6px;background:#DFDFDF;color:#420216;font-size:.82rem;font-weight:600;padding:.4rem .9rem;border-radius:9999px;margin:.75rem 0 1.75rem;}
-        .success-actions{display:flex;flex-direction:column;gap:.7rem;}
-        .btn-pdf{background:linear-gradient(135deg,#420216,#5a0320);color:#F8F5F2;border:none;padding:.9rem 1.5rem;border-radius:.85rem;font-size:1rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 6px 20px rgba(94,11,21,.35);display:flex;align-items:center;justify-content:center;gap:8px;}
-        .btn-pdf:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(94,11,21,.45);}
-        .btn-pdf:disabled{opacity:.65;cursor:not-allowed;transform:none;}
-        .btn-close-success{background:#DFDFDF;color:#150F25;border:none;padding:.7rem 1.5rem;border-radius:.85rem;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s;}
-        .btn-close-success:hover{background:#D689A3;color:white;}
     
-        /* ===== STEP ФОРМА ===== */
-        .step-fieldset { display: none; }
-        .step-fieldset.active { display: block; }
-
-        .step-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-top: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .btn-next {
-            background-color: var(--accent);
-            color: var(--white);
-            border: none;
-            padding: 0.9rem 2rem;
-            border-radius: 0.75rem;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-            box-shadow: 0 6px 20px rgba(66,2,22,0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-next:hover { background-color: #5a0320; transform: translateY(-2px); }
-
-        .btn-prev {
-            background: transparent;
-            color: var(--accent);
-            border: 1.5px solid var(--accent);
-            padding: 0.9rem 1.5rem;
-            border-radius: 0.75rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-prev:hover { background: var(--accent); color: var(--white); }
-
-        .step-counter {
-            font-size: 0.82rem;
-            color: var(--secondary);
-            font-weight: 500;
-        }
-
-        .step-dots {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-        .step-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: var(--champagne);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .step-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
-        .step-dot.done { background: var(--rose); }
-
-        /* Анімація переходу */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .step-fieldset.active { animation: fadeIn 0.25s ease; }
-
-        </style>
 </head>
 <body>
-    <div class="logo-header">
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="topbar-logo">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="1495-583 442 137" class="site-logo" style="width:180px;height:auto;display:block"><path d="M1515.73-446.56c14.89-36.12-9.87-56.21-16.22-81.48 28.18 22.53 75.45-10.02 33.44-53.88 111.97 25.78 5.44 80.37-17.22 135.36z"/><path d="M1544.18-553.46c4.17 9.91-2.28 22.08-14.41 27.18-12.13 5.1-25.35 1.21-29.52-8.7-4.17-9.91 26.93 2.98 39.06-2.12 12.13-5.1.7-26.27 4.87-16.36z"/><path d="M1612.11-468.22v-6.6h3.49v6.6h-3.49zM1582.29-516.01l15.02 41.93 14.95-41.93h4.32l-17.38 47.79h-3.78l-17.44-47.79h4.31z"/><path d="M1731.1-468.25h4.14v-17.64h12.41l9.87 17.64h4.67l-10.29-18.44c1.89-.45 3.53-1.37 4.91-2.76 1.42-1.39 2.5-3.09 3.25-5.11.79-2.02 1.18-4.17 1.18-6.46 0-1.84-.32-3.63-.95-5.38-.59-1.8-1.46-3.41-2.6-4.85-1.1-1.48-2.4-2.65-3.9-3.5-1.5-.85-3.16-1.28-4.97-1.28h-17.73v47.79zm4.14-21.81v-21.81h13.36c1.58 0 3 .52 4.26 1.55 1.3 .98 2.32 2.31 3.07 3.97.79 1.61 1.18 3.39 1.18 5.32 0 1.88-.33 3.68-1 5.38-.67 1.66-1.61 3.01-2.83 4.04-1.22 1.03-2.66 1.55-4.32 1.55h-13.72z"/><path d="M1914-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.94-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.98-2.91 2.36-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.32-5.38 2.41-1.35 5.01-2.02 7.81-2.02 2.95 0 5.63.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.78 2.24-3.86 4.01-6.27 5.31-2.4 1.3-5 1.95-7.8 1.95zm-15.55-24.23c0 2.6.38 5.12 1.12 7.54.75 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.91 4.44 1.93 1.08 4.04 1.62 6.33 1.62s4.55-.56 6.44-1.68c1.93-1.17 3.57-2.7 4.91-4.58 1.37-1.93 2.42-4.08 3.13-6.46.71-2.38 1.06-4.8 1.06-7.27 0-2.6-.38-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.37 0-4.52.56-6.45 1.68-1.89 1.12-3.53 2.65-4.91 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/><path d="M1866.14-468.26v-47.72h4.14v27.73l23.11-27.8h4.55l-17.14 21 18.03 26.79h-4.67l-16.02-23.96-7.86 9.29v14.67h-4.14zm-5.81-47.79v47.79h-4.08v-22.35h-24.89v22.35h-4.14v-47.79h4.14v21.27h24.89v-21.27h4.08z"/><path d="M1820.59-507.09c-.59-.76-1.28-1.44-2.07-2.02-.79-.63-1.67-1.16-2.66-1.61-.98-.45-2.05-.81-3.19-1.08-1.1-.27-2.28-.4-3.55-.4-3.66 0-6.36.81-8.09 2.42-1.69 1.57-2.54 3.72-2.54 6.46 0 1.88.39 3.37 1.18 4.44.83 1.08 2.11 1.95 3.84 2.63 1.73.67 3.94 1.37 6.62 2.09 3 .72 5.58 1.57 7.74 2.56 2.17 .99 3.84 2.33 5.03 4.04 1.18 1.66 1.77 3.93 1.77 6.8 0 2.2-.38 4.11-1.12 5.72-.75 1.62-1.79 2.96-3.13 4.04s-2.94 1.81-4.79 2.35c-1.85.49-3.88.74-6.09.74-2.17 0-4.26-.25-6.27-.74s-3.87-1.29-5.64-2.28c-1.77-1.03-3.43-2.33-4.97-3.9l2.07-3.84c.75.9 1.64 1.75 2.66 2.56 1.06.76 2.23 1.46 3.49 2.08 1.3.63 2.68 1.12 4.14 1.48 1.5.32 3.03.47 4.61.47 3.35 0 5.95-.69 7.8-2.09 1.89-1.39 2.84-3.46 2.84-6.2 0-1.97-.47-3.55-1.42-4.71-.95-1.21-2.37-2.2-4.26-2.96-1.89-.76-4.22-1.5-6.97-2.22-2.92-.76-5.38-1.61-7.39-2.55-2.01-.94-3.53-2.18-4.55-3.71-1-1.57-1.48-3.63-1.48-6.19 0-2.96.63-5.45 1.89-7.47 1.3-2.06 3.07-3.61 5.32-4.64 2.25-1.08 4.83-1.61 7.74-1.61 1.85 0 3.57.22 5.14.67 1.62.4 3.09 1.01 4.43 1.82 1.38.81 2.66 1.82 3.84 3.03l-2.01 3.77zM1793.19-472.43v4.17h-28.2v-47.79h27.66v4.17h-23.53v17.23h20.51v3.97h-20.51v18.24h24.06z"/><path d="M1708.35-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.95-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.99-2.91 2.37-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.32-5.38 2.41-1.35 5.01-2.02 7.81-2.02 2.96 0 5.64.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.77 2.24-3.86 4.01-6.26 5.31-2.4 1.3-5.01 1.95-7.81 1.95zm-15.55-24.23c0 2.6.37 5.12 1.12 7.54.75 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.91 4.44 1.93 1.08 4.04 1.62 6.33 1.62 2.4 0 4.55-.56 6.44-1.68 1.93-1.17 3.57-2.7 4.91-4.58 1.38-1.93 2.42-4.08 3.13-6.46.71-2.38 1.06-4.8 1.06-7.27 0-2.6-.37-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.36 0-4.51.56-6.44 1.68-1.9 1.12-3.54 2.65-4.92 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/><path d="M1660.5-468.26v-47.72h4.14v27.73l23.11-27.8h4.55l-17.14 21 18.03 26.79h-4.67l-16.02-23.96-7.86 9.29v14.67H1660.5z"/><path d="M1637.74-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.94-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.99-2.91 2.37-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.33-5.38 2.4-1.35 5-2.02 7.8-2.02 2.95 0 5.63.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.78 2.24-3.86 4.01-6.27 5.31-2.4 1.3-5 1.95-7.8 1.95zm-15.55-24.23c0 2.6.38 5.12 1.13 7.54.74 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.9 4.44 1.93 1.08 4.04 1.62 6.33 1.62 2.4 0 4.55-.56 6.44-1.68 1.93-1.17 3.57-2.7 4.91-4.58 1.38-1.93 2.43-4.08 3.14-6.46.7-2.38 1.06-4.8 1.06-7.27 0-2.6-.37-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.37 0-4.52.56-6.45 1.68-1.89 1.12-3.53 2.65-4.91 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/></svg>
     </div>
+    <div class="topbar-right">
+        <span>UX/UI Design Brief</span>
+        <span class="version-tag">V 1.0</span>
+    </div>
+</div>
 
-<!-- ПРОГРЕС-БАР -->
+<!-- PROGRESS -->
 <div class="progress-wrap">
     <div class="progress-inner">
         <div class="progress-label">
-            <span>Заповнення брифу</span>
-            <span id="progress-text">0%</span>
+            <span id="step-counter">Крок 1 з 8</span>
         </div>
         <div class="progress-track">
             <div class="progress-fill" id="progress-fill"></div>
@@ -149,65 +43,63 @@
     </div>
 </div>
 
-<header>
-    
-    <h1>БРИФ на UX/UI дизайн</h1>
-    <p>Дякуємо за час, приділений заповненню брифу. Детальні відповіді допоможуть нам створити сайт, що повністю відповідає вашим очікуванням.</p>
-</header>
-
-<main>
-  <form name="site-brief"  id="brief-form" method="POST" enctype="multipart/form-data">
-    <!-- Web3Forms access key — замініть YOUR_ACCESS_KEY на свій ключ з web3forms.com -->
+<!-- MAIN -->
+<div class="page-body">
+<form name="site-brief" id="brief-form" method="POST" enctype="multipart/form-data">
+    <!-- Hidden fields -->
     <input type="hidden" name="access_key" value="bea45c28-7de8-42c9-a088-57dbc283d3db">
     <input type="hidden" name="subject" value="Новий бриф на UX/UI дизайн">
     <input type="hidden" name="from_name" value="Бриф сайт">
     <input type="hidden" name="replyto" value="okoreshko88@gmail.com">
     <input type="hidden" name="redirect" value="false">
-    <p style="display:none;"><label>Bot field: <input name="botcheck" style="display:none"></label></p>
-
-    <!-- UTM мітки — заповнюються автоматично з URL -->
-    <input type="hidden" name="utm_source"   id="utm_source">
-    <input type="hidden" name="utm_medium"   id="utm_medium">
+    <input type="hidden" name="utm_source" id="utm_source">
+    <input type="hidden" name="utm_medium" id="utm_medium">
     <input type="hidden" name="utm_campaign" id="utm_campaign">
-    <input type="hidden" name="utm_content"  id="utm_content">
-    <input type="hidden" name="utm_term"     id="utm_term">
-    <input type="hidden" name="referrer"     id="referrer">
+    <input type="hidden" name="utm_content" id="utm_content">
+    <input type="hidden" name="utm_term" id="utm_term">
+    <input type="hidden" name="referrer" id="referrer">
 
-    <!-- 1. Контактна інформація -->
-    <fieldset id="section1" class="step-fieldset">
-        <legend>&#x1F4A1; 1. Контактна інформація</legend>
-        <p>
-            <label for="company">Компанія <span class="req">*</span></label>
-            <input type="text" id="company" name="company" placeholder="Назва компанії" required>
+    <!-- STEP 1 -->
+    <div class="step-section active" id="section1">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">💬</span> 1. Контактна інформація</h2>
+            <p class="step-subtitle">Давайте познайомимося ближче, щоб ми могли зв'язатися з вами.</p>
+        </div>
+        <div class="field-card">
+<label>Компанія <span class="req">*</span></label>
+<input type="text" id="company" name="company" placeholder="Назва компанії" required>
             <span class="field-error" id="err-company">Будь ласка, вкажіть назву компанії</span>
-        </p>
-        <p>
-            <label for="contact_person">Контактна особа <span class="req">*</span> <span class="hint" data-tip="ПІБ та посада людини, з якою ми будемо спілкуватись">?</span></label>
-            <input type="text" id="contact_person" name="contact_person" placeholder="ПІБ, посада" required>
+</div>
+        <div class="field-card">
+<label>Контактна особа <span class="req">*</span></label>
+<input type="text" id="contact_person" name="contact_person" placeholder="ПІБ, посада" required>
             <span class="field-error" id="err-contact">Вкажіть контактну особу</span>
-        </p>
-        <p>
-            <label for="phone">Телефон <span class="req">*</span></label>
-            <input type="tel" id="phone" name="phone" placeholder="+380XXXXXXXXX" required>
+</div>
+        <div class="field-card">
+<label>Телефон <span class="req">*</span></label>
+<input type="tel" id="phone" name="phone" placeholder="+380XXXXXXXXX" required>
             <span class="field-error" id="err-phone">Вкажіть коректний номер телефону</span>
-        </p>
-        <p>
-            <label for="email">E-mail <span class="req">*</span></label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+</div>
+        <div class="field-card">
+<label>E-mail <span class="req">*</span></label>
+<input type="email" id="email" name="email" placeholder="your@email.com" required>
             <span class="field-error" id="err-email">Вкажіть коректний e-mail</span>
-        </p>
-        <p>
-            <label for="other_contacts">Інші контакти <span class="hint" data-tip="Telegram, Instagram, Viber — будь-який зручний канал">?</span></label>
-            <input type="text" id="other_contacts" name="other_contacts">
-        </p>
-    </fieldset>
+</div>
+        <div class="field-card">
+<label>Інші контакти </label>
+<input type="text" id="other_contacts" name="other_contacts">
+</div>
+    </div>
 
-    <!-- 2. Про компанію -->
-    <fieldset id="section2" class="step-fieldset">
-        <legend>&#x1F4A1; 2. Про компанію</legend>
-        <p>
-            <label for="business_sphere">Сфера діяльності</label>
-            <input type="text" id="business_sphere" name="business_sphere" placeholder="Наприклад: будівництво, IT, краса...">
+    <!-- STEP 2 -->
+    <div class="step-section" id="section2">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">🏢</span> 2. Про компанію</h2>
+            <p class="step-subtitle">Розкажіть нам про ваш бізнес та продукт.</p>
+        </div>
+        <div class="field-card">
+<label>Сфера діяльності </label>
+<input type="text" id="business_sphere" name="business_sphere" placeholder="Наприклад: будівництво, IT, краса...">
         </p>
         <p>
             <label for="product_service">Продукт / послуга</label>
@@ -216,14 +108,14 @@
         <p>
             <label for="product_description">Опис продукту <span class="hint" data-tip="Технічні характеристики, переваги, особливості — чим детальніше, тим краще">?</span></label>
             <textarea id="product_description" name="product_description" rows="4"></textarea>
-        </p>
-        <p>
-            <label for="usp">УТП — Унікальна торгова пропозиція <span class="hint" data-tip="Чому клієнти обирають саме вас? Наприклад: 24/7 підтримка, гарантія 5 років, найнижча ціна в регіоні">?</span></label>
-            <textarea id="usp" name="usp" rows="3" placeholder="Чому купують саме у вас?"></textarea>
-        </p>
-        <p>
-            <label for="geography">Географія надання послуг</label>
-            <input type="text" id="geography" name="geography" placeholder="Наприклад: Україна, Київ та область">
+</div>
+        <div class="field-card">
+<label>УТП — Унікальна торгова пропозиція </label>
+<textarea id="usp" name="usp" rows="3" placeholder="Чому купують саме у вас?"></textarea>
+</div>
+        <div class="field-card">
+<label>Географія надання послуг </label>
+<input type="text" id="geography" name="geography" placeholder="Наприклад: Україна, Київ та область">
         </p>
         <p>
             <label for="current_website">Поточний сайт (якщо є)</label>
@@ -236,19 +128,22 @@
         <p>
             <label for="keywords">Ключові пошукові запити <span class="hint" data-tip="За якими словами вас мають знаходити в Google? Наприклад: ремонт квартир Київ">?</span></label>
             <textarea id="keywords" name="keywords" rows="2" placeholder="Слова через кому..."></textarea>
-        </p>
-    </fieldset>
+</div>
+    </div>
 
-    <!-- 3. Цільова аудиторія -->
-    <fieldset id="section3" class="step-fieldset">
-        <legend>&#x1F4A1; 3. Цільова аудиторія</legend>
-        <p>
-            <label for="problem_solving">Яку проблему вирішує продукт <span class="hint" data-tip="Наприклад: люди хочуть зробити ремонт але не знають з чого почати">?</span></label>
-            <textarea id="problem_solving" name="problem_solving" rows="3" placeholder="Наприклад: інвестиції, дозвілля..."></textarea>
-        </p>
-        <p>
-            <label for="gender_ratio">Стать аудиторії</label>
-            <input type="text" id="gender_ratio" name="gender_ratio" placeholder="Наприклад: 60% жінки, 40% чоловіки">
+    <!-- STEP 3 -->
+    <div class="step-section" id="section3">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">👥</span> 3. Цільова аудиторія</h2>
+            <p class="step-subtitle">Хто ваш клієнт? Опишіть людину, для якої створюється сайт.</p>
+        </div>
+        <div class="field-card">
+<label>Яку проблему вирішує продукт </label>
+<textarea id="problem_solving" name="problem_solving" rows="3" placeholder="Наприклад: інвестиції, дозвілля..."></textarea>
+</div>
+        <div class="field-card">
+<label>Стать аудиторії </label>
+<input type="text" id="gender_ratio" name="gender_ratio" placeholder="Наприклад: 60% жінки, 40% чоловіки">
         </p>
         <p>
             <label for="age_ratio">Вік аудиторії</label>
@@ -261,15 +156,18 @@
         <p>
             <label for="target_interests">Інтереси аудиторії <span class="hint" data-tip="Це допомагає підібрати правильний тон, зображення та посили на сайті">?</span></label>
             <textarea id="target_interests" name="target_interests" rows="2" placeholder="Бізнес, подорожі, краса..."></textarea>
-        </p>
-    </fieldset>
+</div>
+    </div>
 
-    <!-- 4. Бачення сайту -->
-    <fieldset id="section4" class="step-fieldset">
-        <legend>&#x1F4A1; 4. Бачення майбутнього дизайну</legend>
-        <p>
-            <label for="site_goals">Цілі дизайну</label>
-            <input type="text" id="site_goals" name="site_goals" placeholder="Залучення клієнтів, конверсія, імідж...">
+    <!-- STEP 4 -->
+    <div class="step-section" id="section4">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">🎨</span> 4. Бачення дизайну</h2>
+            <p class="step-subtitle">Яким має бути майбутній сайт? Ваші очікування та побажання.</p>
+        </div>
+        <div class="field-card">
+<label>Цілі дизайну </label>
+<input type="text" id="site_goals" name="site_goals" placeholder="Залучення клієнтів, конверсія, імідж...">
         </p>
         <p>
             <label for="user_action">Очікувана дія користувача</label>
@@ -294,16 +192,19 @@
         <p>
             <label for="technical_aspects">Технічні аспекти <span class="hint" data-tip="Наприклад: адаптивність, SEO, інтеграції з CRM, чат-бот...">?</span></label>
             <textarea id="technical_aspects" name="technical_aspects" rows="3"></textarea>
-        </p>
-    </fieldset>
+</div>
+    </div>
 
-    <!-- 5. Конкуренти -->
-    <fieldset id="section5" class="step-fieldset">
-        <legend>&#x1F4A1; 5. Конкуренти</legend>
-        <p>
-            <label for="competitor_link">Посилання на конкурента</label>
-            <input type="url" id="competitor_link" name="competitor_link" placeholder="https://example.com">
-        </p>
+    <!-- STEP 5 -->
+    <div class="step-section" id="section5">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">🔍</span> 5. Конкуренти</h2>
+            <p class="step-subtitle">Аналіз ринку допоможе створити унікальний дизайн.</p>
+        </div>
+        <div class="field-card">
+<label>Посилання на конкурента </label>
+<input type="url" id="competitor_link" name="competitor_link" placeholder="https://example.com">
+</div>
         <p>
             <label for="competitor_likes">Що подобається у конкурентів</label>
             <textarea id="competitor_likes" name="competitor_likes" rows="3" placeholder="Контент, швидкість, архітектура..."></textarea>
@@ -326,11 +227,14 @@
                 <span class="file-counter" id="counter-dislikes_file"></span>
             </div>
         </p>
-    </fieldset>
+    </div>
 
-    <!-- 6. Матеріали -->
-    <fieldset id="section6" class="step-fieldset">
-        <legend>&#x1F4A1; 6. Матеріали для роботи</legend>
+    <!-- STEP 6 -->
+    <div class="step-section" id="section6">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">📁</span> 6. Матеріали</h2>
+            <p class="step-subtitle">Які матеріали ви можете надати для роботи?</p>
+        </div>
         <div class="material-item">
             <label><input type="checkbox" name="materials" value="logo"> Логотип</label>
             <input type="url" name="logo_link" placeholder="Посилання на хмару">
@@ -361,15 +265,18 @@
             <label><input type="checkbox" name="materials" value="news"> Акції / Новини</label>
             <input type="url" name="news_link" placeholder="Посилання">
         </div>
-        <p>
-            <label for="content_owner">Хто надає контент (тексти, фото)? <span class="hint" data-tip="Від цього залежить вартість: якщо контент замовляєте у нас — вкажіть це">?</span></label>
-            <input type="text" id="content_owner" name="content_owner" placeholder="Ми самі / замовляємо у вас / частково">
-        </p>
-    </fieldset>
+        <div class="field-card">
+<label>Хто надає контент (тексти, фото)? </label>
+<input type="text" id="content_owner" name="content_owner" placeholder="Ми самі / замовляємо у вас / частково">
+</div>
+    </div>
 
-    <!-- 7. Функціональні модулі -->
-    <fieldset id="section7" class="step-fieldset">
-        <legend>&#x1F4A1; 7. Функціональні модулі</legend>
+    <!-- STEP 7 -->
+    <div class="step-section" id="section7">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">⚙️</span> 7. Функціональні модулі</h2>
+            <p class="step-subtitle">Які функції потрібні на сайті?</p>
+        </div>
         <div class="module-group">
             <p><strong>Пошук на сайті:</strong></p>
             <label class="radio-label"><input type="radio" name="search_status" value="yes"> &#x2705; Так, потрібен</label>
@@ -425,41 +332,27 @@
             </div>
             <input type="text" name="lang_other" placeholder="Інші мови за побажанням...">
         </div>
-    </fieldset>
-
-    <!-- 9. Примітки -->
-    <fieldset id="section8" class="step-fieldset">
-        <legend>&#x1F4A1; 8. Примітки</legend>
-        <label for="additional_notes">Додайте будь-що, на чому хочете зробити акцент:</label>
-        <textarea id="additional_notes" name="additional_notes" rows="6" placeholder="Ваші побажання..."></textarea>
-    </fieldset>
-
-        <!-- Крапки-індикатори -->
-    <div class="step-dots" id="step-dots"></div>
-
-    <!-- Навігація -->
-    <div class="step-nav" id="step-nav">
-        <button type="button" class="btn-prev" id="btn-prev" onclick="stepPrev()" style="visibility:hidden">← Назад</button>
-        <span class="step-counter" id="step-counter">Крок 1 з 8</span>
-        <button type="button" class="btn-next" id="btn-next" onclick="stepNext()">Наступний крок →</button>
     </div>
 
-    <button type="submit" class="submit-btn" id="submit-btn" style="display:none">🚀 Відправити бриф</button>
-  </form>
-
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-left">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="1495-583 442 137" class="site-logo" style="width:180px;height:auto;display:block"><path d="M1515.73-446.56c14.89-36.12-9.87-56.21-16.22-81.48 28.18 22.53 75.45-10.02 33.44-53.88 111.97 25.78 5.44 80.37-17.22 135.36z"/><path d="M1544.18-553.46c4.17 9.91-2.28 22.08-14.41 27.18-12.13 5.1-25.35 1.21-29.52-8.7-4.17-9.91 26.93 2.98 39.06-2.12 12.13-5.1.7-26.27 4.87-16.36z"/><path d="M1612.11-468.22v-6.6h3.49v6.6h-3.49zM1582.29-516.01l15.02 41.93 14.95-41.93h4.32l-17.38 47.79h-3.78l-17.44-47.79h4.31z"/><path d="M1731.1-468.25h4.14v-17.64h12.41l9.87 17.64h4.67l-10.29-18.44c1.89-.45 3.53-1.37 4.91-2.76 1.42-1.39 2.5-3.09 3.25-5.11.79-2.02 1.18-4.17 1.18-6.46 0-1.84-.32-3.63-.95-5.38-.59-1.8-1.46-3.41-2.6-4.85-1.1-1.48-2.4-2.65-3.9-3.5-1.5-.85-3.16-1.28-4.97-1.28h-17.73v47.79zm4.14-21.81v-21.81h13.36c1.58 0 3 .52 4.26 1.55 1.3 .98 2.32 2.31 3.07 3.97.79 1.61 1.18 3.39 1.18 5.32 0 1.88-.33 3.68-1 5.38-.67 1.66-1.61 3.01-2.83 4.04-1.22 1.03-2.66 1.55-4.32 1.55h-13.72z"/><path d="M1914-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.94-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.98-2.91 2.36-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.32-5.38 2.41-1.35 5.01-2.02 7.81-2.02 2.95 0 5.63.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.78 2.24-3.86 4.01-6.27 5.31-2.4 1.3-5 1.95-7.8 1.95zm-15.55-24.23c0 2.6.38 5.12 1.12 7.54.75 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.91 4.44 1.93 1.08 4.04 1.62 6.33 1.62s4.55-.56 6.44-1.68c1.93-1.17 3.57-2.7 4.91-4.58 1.37-1.93 2.42-4.08 3.13-6.46.71-2.38 1.06-4.8 1.06-7.27 0-2.6-.38-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.37 0-4.52.56-6.45 1.68-1.89 1.12-3.53 2.65-4.91 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/><path d="M1866.14-468.26v-47.72h4.14v27.73l23.11-27.8h4.55l-17.14 21 18.03 26.79h-4.67l-16.02-23.96-7.86 9.29v14.67h-4.14zm-5.81-47.79v47.79h-4.08v-22.35h-24.89v22.35h-4.14v-47.79h4.14v21.27h24.89v-21.27h4.08z"/><path d="M1820.59-507.09c-.59-.76-1.28-1.44-2.07-2.02-.79-.63-1.67-1.16-2.66-1.61-.98-.45-2.05-.81-3.19-1.08-1.1-.27-2.28-.4-3.55-.4-3.66 0-6.36.81-8.09 2.42-1.69 1.57-2.54 3.72-2.54 6.46 0 1.88.39 3.37 1.18 4.44.83 1.08 2.11 1.95 3.84 2.63 1.73.67 3.94 1.37 6.62 2.09 3 .72 5.58 1.57 7.74 2.56 2.17 .99 3.84 2.33 5.03 4.04 1.18 1.66 1.77 3.93 1.77 6.8 0 2.2-.38 4.11-1.12 5.72-.75 1.62-1.79 2.96-3.13 4.04s-2.94 1.81-4.79 2.35c-1.85.49-3.88.74-6.09.74-2.17 0-4.26-.25-6.27-.74s-3.87-1.29-5.64-2.28c-1.77-1.03-3.43-2.33-4.97-3.9l2.07-3.84c.75.9 1.64 1.75 2.66 2.56 1.06.76 2.23 1.46 3.49 2.08 1.3.63 2.68 1.12 4.14 1.48 1.5.32 3.03.47 4.61.47 3.35 0 5.95-.69 7.8-2.09 1.89-1.39 2.84-3.46 2.84-6.2 0-1.97-.47-3.55-1.42-4.71-.95-1.21-2.37-2.2-4.26-2.96-1.89-.76-4.22-1.5-6.97-2.22-2.92-.76-5.38-1.61-7.39-2.55-2.01-.94-3.53-2.18-4.55-3.71-1-1.57-1.48-3.63-1.48-6.19 0-2.96.63-5.45 1.89-7.47 1.3-2.06 3.07-3.61 5.32-4.64 2.25-1.08 4.83-1.61 7.74-1.61 1.85 0 3.57.22 5.14.67 1.62.4 3.09 1.01 4.43 1.82 1.38.81 2.66 1.82 3.84 3.03l-2.01 3.77zM1793.19-472.43v4.17h-28.2v-47.79h27.66v4.17h-23.53v17.23h20.51v3.97h-20.51v18.24h24.06z"/><path d="M1708.35-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.95-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.99-2.91 2.37-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.32-5.38 2.41-1.35 5.01-2.02 7.81-2.02 2.96 0 5.64.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.77 2.24-3.86 4.01-6.26 5.31-2.4 1.3-5.01 1.95-7.81 1.95zm-15.55-24.23c0 2.6.37 5.12 1.12 7.54.75 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.91 4.44 1.93 1.08 4.04 1.62 6.33 1.62 2.4 0 4.55-.56 6.44-1.68 1.93-1.17 3.57-2.7 4.91-4.58 1.38-1.93 2.42-4.08 3.13-6.46.71-2.38 1.06-4.8 1.06-7.27 0-2.6-.37-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.36 0-4.51.56-6.44 1.68-1.9 1.12-3.54 2.65-4.92 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/><path d="M1660.5-468.26v-47.72h4.14v27.73l23.11-27.8h4.55l-17.14 21 18.03 26.79h-4.67l-16.02-23.96-7.86 9.29v14.67H1660.5z"/><path d="M1637.74-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.94-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.99-2.91 2.37-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.33-5.38 2.4-1.35 5-2.02 7.8-2.02 2.95 0 5.63.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.78 2.24-3.86 4.01-6.27 5.31-2.4 1.3-5 1.95-7.8 1.95zm-15.55-24.23c0 2.6.38 5.12 1.13 7.54.74 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.9 4.44 1.93 1.08 4.04 1.62 6.33 1.62 2.4 0 4.55-.56 6.44-1.68 1.93-1.17 3.57-2.7 4.91-4.58 1.38-1.93 2.43-4.08 3.14-6.46.7-2.38 1.06-4.8 1.06-7.27 0-2.6-.37-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.37 0-4.52.56-6.45 1.68-1.89 1.12-3.53 2.65-4.91 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/></svg>
-                <p class="footer-copy">&copy; Всі права захищені. Розробка та підтримка V.Okoreshko</p>
-            </div>
-            <div class="footer-right">
-                <a href="https://t.me/okoreshko88" target="_blank" class="social-link">Telegram</a>
-                <a href="/cdn-cgi/l/email-protection#9df2f6f2eff8eef5f6f2a5a5ddfaf0fcf4f1b3fef2f0" class="social-link">Email</a>
-            </div>
+    <!-- STEP 8 -->
+    <div class="step-section" id="section8">
+        <div class="step-header">
+            <h2 class="step-title"><span class="step-icon">📝</span> 8. Примітки</h2>
+            <p class="step-subtitle">Останній крок — будь-які додаткові побажання.</p>
         </div>
-    </footer>
-</main>
+        <label for="additional_notes">Додайте будь-що, на чому хочете зробити акцент:</label>
+        <textarea id="additional_notes" name="additional_notes" rows="6" placeholder="Ваші побажання..."></textarea>
+    </div>
+
+    <!-- NAV -->
+    <div class="step-nav" id="step-nav">
+        <button type="button" class="btn-prev" id="btn-prev" onclick="stepPrev()">‹ Назад</button>
+        <button type="button" class="btn-next" id="btn-next" onclick="stepNext()">Наступний крок ›</button>
+    </div>
+    <button type="submit" class="submit-btn" id="submit-btn" style="display:none">🚀 Відправити бриф</button>
+
+</form>
+</div>
 
 <!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="success-overlay">
@@ -480,6 +373,20 @@
         </div>
     </div>
 </div>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="1495-583 442 137" class="site-logo" style="width:180px;height:auto;display:block"><path d="M1515.73-446.56c14.89-36.12-9.87-56.21-16.22-81.48 28.18 22.53 75.45-10.02 33.44-53.88 111.97 25.78 5.44 80.37-17.22 135.36z"/><path d="M1544.18-553.46c4.17 9.91-2.28 22.08-14.41 27.18-12.13 5.1-25.35 1.21-29.52-8.7-4.17-9.91 26.93 2.98 39.06-2.12 12.13-5.1.7-26.27 4.87-16.36z"/><path d="M1612.11-468.22v-6.6h3.49v6.6h-3.49zM1582.29-516.01l15.02 41.93 14.95-41.93h4.32l-17.38 47.79h-3.78l-17.44-47.79h4.31z"/><path d="M1731.1-468.25h4.14v-17.64h12.41l9.87 17.64h4.67l-10.29-18.44c1.89-.45 3.53-1.37 4.91-2.76 1.42-1.39 2.5-3.09 3.25-5.11.79-2.02 1.18-4.17 1.18-6.46 0-1.84-.32-3.63-.95-5.38-.59-1.8-1.46-3.41-2.6-4.85-1.1-1.48-2.4-2.65-3.9-3.5-1.5-.85-3.16-1.28-4.97-1.28h-17.73v47.79zm4.14-21.81v-21.81h13.36c1.58 0 3 .52 4.26 1.55 1.3 .98 2.32 2.31 3.07 3.97.79 1.61 1.18 3.39 1.18 5.32 0 1.88-.33 3.68-1 5.38-.67 1.66-1.61 3.01-2.83 4.04-1.22 1.03-2.66 1.55-4.32 1.55h-13.72z"/><path d="M1914-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.94-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.98-2.91 2.36-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.32-5.38 2.41-1.35 5.01-2.02 7.81-2.02 2.95 0 5.63.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.78 2.24-3.86 4.01-6.27 5.31-2.4 1.3-5 1.95-7.8 1.95zm-15.55-24.23c0 2.6.38 5.12 1.12 7.54.75 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.91 4.44 1.93 1.08 4.04 1.62 6.33 1.62s4.55-.56 6.44-1.68c1.93-1.17 3.57-2.7 4.91-4.58 1.37-1.93 2.42-4.08 3.13-6.46.71-2.38 1.06-4.8 1.06-7.27 0-2.6-.38-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.37 0-4.52.56-6.45 1.68-1.89 1.12-3.53 2.65-4.91 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/><path d="M1866.14-468.26v-47.72h4.14v27.73l23.11-27.8h4.55l-17.14 21 18.03 26.79h-4.67l-16.02-23.96-7.86 9.29v14.67h-4.14zm-5.81-47.79v47.79h-4.08v-22.35h-24.89v22.35h-4.14v-47.79h4.14v21.27h24.89v-21.27h4.08z"/><path d="M1820.59-507.09c-.59-.76-1.28-1.44-2.07-2.02-.79-.63-1.67-1.16-2.66-1.61-.98-.45-2.05-.81-3.19-1.08-1.1-.27-2.28-.4-3.55-.4-3.66 0-6.36.81-8.09 2.42-1.69 1.57-2.54 3.72-2.54 6.46 0 1.88.39 3.37 1.18 4.44.83 1.08 2.11 1.95 3.84 2.63 1.73.67 3.94 1.37 6.62 2.09 3 .72 5.58 1.57 7.74 2.56 2.17 .99 3.84 2.33 5.03 4.04 1.18 1.66 1.77 3.93 1.77 6.8 0 2.2-.38 4.11-1.12 5.72-.75 1.62-1.79 2.96-3.13 4.04s-2.94 1.81-4.79 2.35c-1.85.49-3.88.74-6.09.74-2.17 0-4.26-.25-6.27-.74s-3.87-1.29-5.64-2.28c-1.77-1.03-3.43-2.33-4.97-3.9l2.07-3.84c.75.9 1.64 1.75 2.66 2.56 1.06.76 2.23 1.46 3.49 2.08 1.3.63 2.68 1.12 4.14 1.48 1.5.32 3.03.47 4.61.47 3.35 0 5.95-.69 7.8-2.09 1.89-1.39 2.84-3.46 2.84-6.2 0-1.97-.47-3.55-1.42-4.71-.95-1.21-2.37-2.2-4.26-2.96-1.89-.76-4.22-1.5-6.97-2.22-2.92-.76-5.38-1.61-7.39-2.55-2.01-.94-3.53-2.18-4.55-3.71-1-1.57-1.48-3.63-1.48-6.19 0-2.96.63-5.45 1.89-7.47 1.3-2.06 3.07-3.61 5.32-4.64 2.25-1.08 4.83-1.61 7.74-1.61 1.85 0 3.57.22 5.14.67 1.62.4 3.09 1.01 4.43 1.82 1.38.81 2.66 1.82 3.84 3.03l-2.01 3.77zM1793.19-472.43v4.17h-28.2v-47.79h27.66v4.17h-23.53v17.23h20.51v3.97h-20.51v18.24h24.06z"/><path d="M1708.35-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.95-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.99-2.91 2.37-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.32-5.38 2.41-1.35 5.01-2.02 7.81-2.02 2.96 0 5.64.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.77 2.24-3.86 4.01-6.26 5.31-2.4 1.3-5.01 1.95-7.81 1.95zm-15.55-24.23c0 2.6.37 5.12 1.12 7.54.75 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.91 4.44 1.93 1.08 4.04 1.62 6.33 1.62 2.4 0 4.55-.56 6.44-1.68 1.93-1.17 3.57-2.7 4.91-4.58 1.38-1.93 2.42-4.08 3.13-6.46.71-2.38 1.06-4.8 1.06-7.27 0-2.6-.37-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.36 0-4.51.56-6.44 1.68-1.9 1.12-3.54 2.65-4.92 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/><path d="M1660.5-468.26v-47.72h4.14v27.73l23.11-27.8h4.55l-17.14 21 18.03 26.79h-4.67l-16.02-23.96-7.86 9.29v14.67H1660.5z"/><path d="M1637.74-467.92c-2.96 0-5.64-.67-8.04-2.01-2.4-1.35-4.47-3.17-6.2-5.46-1.74-2.33-3.08-4.93-4.03-7.81-.94-2.91-1.42-5.9-1.42-8.95s.49-6.18 1.48-9.06c.99-2.91 2.37-5.49 4.14-7.73 1.81-2.29 3.92-4.08 6.33-5.38 2.4-1.35 5-2.02 7.8-2.02 2.95 0 5.63.7 8.04 2.09 2.4 1.39 4.45 3.25 6.15 5.58 1.73 2.33 3.07 4.93 4.02 7.81.95 2.87 1.42 5.81 1.42 8.81 0 3.19-.49 6.24-1.48 9.15s-2.38 5.51-4.15 7.8c-1.78 2.24-3.86 4.01-6.27 5.31-2.4 1.3-5 1.95-7.8 1.95zm-15.55-24.23c0 2.6.38 5.12 1.13 7.54.74 2.38 1.81 4.51 3.19 6.4 1.38 1.84 3.02 3.32 4.9 4.44 1.93 1.08 4.04 1.62 6.33 1.62 2.4 0 4.55-.56 6.44-1.68 1.93-1.17 3.57-2.7 4.91-4.58 1.38-1.93 2.43-4.08 3.14-6.46.7-2.38 1.06-4.8 1.06-7.27 0-2.6-.37-5.09-1.12-7.47-.75-2.38-1.83-4.51-3.25-6.4-1.38-1.88-3.02-3.36-4.91-4.44-1.89-1.08-3.98-1.62-6.26-1.62-2.37 0-4.52.56-6.45 1.68-1.89 1.12-3.53 2.65-4.91 4.58-1.34 1.88-2.38 4.02-3.13 6.39-.71 2.38-1.07 4.8-1.07 7.27z"/></svg>
+            <p class="footer-copy">© Всі права захищені. Розробка та підтримка V.Okoreshko</p>
+        </div>
+        <div class="footer-right">
+            <a href="https://t.me/okoreshko88" target="_blank" class="social-link">Telegram</a>
+            <a href="/cdn-cgi/l/email-protection#fc9397938e998f949793c4c4bc9b919d9590d29f9391" class="social-link">Email</a>
+        </div>
+    </div>
+</footer>
+
 <script src="script.js"></script>
 </body>
 </html>
