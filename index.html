@@ -56,7 +56,80 @@
         .btn-pdf:disabled{opacity:.65;cursor:not-allowed;transform:none;}
         .btn-close-success{background:#DFDFDF;color:#150F25;border:none;padding:.7rem 1.5rem;border-radius:.85rem;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s;}
         .btn-close-success:hover{background:#D689A3;color:white;}
-    </style>
+    
+        /* ===== STEP ФОРМА ===== */
+        .step-fieldset { display: none; }
+        .step-fieldset.active { display: block; }
+
+        .step-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-next {
+            background-color: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 6px 20px rgba(66,2,22,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-next:hover { background-color: #5a0320; transform: translateY(-2px); }
+
+        .btn-prev {
+            background: transparent;
+            color: var(--accent);
+            border: 1.5px solid var(--accent);
+            padding: 0.9rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-prev:hover { background: var(--accent); color: var(--white); }
+
+        .step-counter {
+            font-size: 0.82rem;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .step-dots {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .step-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--champagne);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .step-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
+        .step-dot.done { background: var(--rose); }
+
+        /* Анімація переходу */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .step-fieldset.active { animation: fadeIn 0.25s ease; }
+
+        </style>
 </head>
 <body>
     <div class="logo-header">
@@ -101,7 +174,7 @@
     <input type="hidden" name="referrer"     id="referrer">
 
     <!-- 1. Контактна інформація -->
-    <fieldset id="section1">
+    <fieldset id="section1" class="step-fieldset">
         <legend>&#x1F4A1; 1. Контактна інформація</legend>
         <p>
             <label for="company">Компанія <span class="req">*</span></label>
@@ -130,7 +203,7 @@
     </fieldset>
 
     <!-- 2. Про компанію -->
-    <fieldset id="section2">
+    <fieldset id="section2" class="step-fieldset">
         <legend>&#x1F4A1; 2. Про компанію</legend>
         <p>
             <label for="business_sphere">Сфера діяльності</label>
@@ -167,7 +240,7 @@
     </fieldset>
 
     <!-- 3. Цільова аудиторія -->
-    <fieldset id="section3">
+    <fieldset id="section3" class="step-fieldset">
         <legend>&#x1F4A1; 3. Цільова аудиторія</legend>
         <p>
             <label for="problem_solving">Яку проблему вирішує продукт <span class="hint" data-tip="Наприклад: люди хочуть зробити ремонт але не знають з чого почати">?</span></label>
@@ -192,7 +265,7 @@
     </fieldset>
 
     <!-- 4. Бачення сайту -->
-    <fieldset id="section4">
+    <fieldset id="section4" class="step-fieldset">
         <legend>&#x1F4A1; 4. Бачення майбутнього дизайну</legend>
         <p>
             <label for="site_goals">Цілі дизайну</label>
@@ -225,7 +298,7 @@
     </fieldset>
 
     <!-- 5. Конкуренти -->
-    <fieldset id="section5">
+    <fieldset id="section5" class="step-fieldset">
         <legend>&#x1F4A1; 5. Конкуренти</legend>
         <p>
             <label for="competitor_link">Посилання на конкурента</label>
@@ -256,7 +329,7 @@
     </fieldset>
 
     <!-- 6. Матеріали -->
-    <fieldset id="section6">
+    <fieldset id="section6" class="step-fieldset">
         <legend>&#x1F4A1; 6. Матеріали для роботи</legend>
         <div class="material-item">
             <label><input type="checkbox" name="materials" value="logo"> Логотип</label>
@@ -295,7 +368,7 @@
     </fieldset>
 
     <!-- 7. Функціональні модулі -->
-    <fieldset id="section7">
+    <fieldset id="section7" class="step-fieldset">
         <legend>&#x1F4A1; 7. Функціональні модулі</legend>
         <div class="module-group">
             <p><strong>Пошук на сайті:</strong></p>
@@ -355,13 +428,23 @@
     </fieldset>
 
     <!-- 9. Примітки -->
-    <fieldset id="section8">
+    <fieldset id="section8" class="step-fieldset">
         <legend>&#x1F4A1; 8. Примітки</legend>
         <label for="additional_notes">Додайте будь-що, на чому хочете зробити акцент:</label>
         <textarea id="additional_notes" name="additional_notes" rows="6" placeholder="Ваші побажання..."></textarea>
     </fieldset>
 
-    <button type="submit" class="submit-btn" id="submit-btn">&#x1F680; Відправити бриф</button>
+        <!-- Крапки-індикатори -->
+    <div class="step-dots" id="step-dots"></div>
+
+    <!-- Навігація -->
+    <div class="step-nav" id="step-nav">
+        <button type="button" class="btn-prev" id="btn-prev" onclick="stepPrev()" style="visibility:hidden">← Назад</button>
+        <span class="step-counter" id="step-counter">Крок 1 з 8</span>
+        <button type="button" class="btn-next" id="btn-next" onclick="stepNext()">Наступний крок →</button>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submit-btn" style="display:none">🚀 Відправити бриф</button>
   </form>
 
     <footer>

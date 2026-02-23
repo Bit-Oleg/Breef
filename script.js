@@ -414,6 +414,79 @@ async function downloadPDF() {
     }
 }
 
+
+// ========== STEP НАВІГАЦІЯ ==========
+const TOTAL_STEPS = 8;
+let currentStep = 1;
+
+function initSteps() {
+    const dots = document.getElementById('step-dots');
+    if (!dots) return;
+    dots.innerHTML = Array.from({length: TOTAL_STEPS}, (_, i) =>
+        `<div class="step-dot ${i === 0 ? 'active' : ''}" onclick="goToStep(${i+1})" title="Крок ${i+1}"></div>`
+    ).join('');
+    updateNav();
+}
+
+function updateNav() {
+    const prev = document.getElementById('btn-prev');
+    const next = document.getElementById('btn-next');
+    const counter = document.getElementById('step-counter');
+    const submit = document.getElementById('submit-btn');
+    const dots = document.querySelectorAll('.step-dot');
+
+    if (prev) prev.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+    if (counter) counter.textContent = `Крок ${currentStep} з ${TOTAL_STEPS}`;
+
+    // Оновлюємо dots
+    dots.forEach((dot, i) => {
+        dot.classList.remove('active', 'done');
+        if (i + 1 === currentStep) dot.classList.add('active');
+        else if (i + 1 < currentStep) dot.classList.add('done');
+    });
+
+    // Остання секція — показуємо submit замість next
+    if (currentStep === TOTAL_STEPS) {
+        if (next) next.style.display = 'none';
+        if (submit) submit.style.display = 'block';
+    } else {
+        if (next) next.style.display = 'flex';
+        if (submit) submit.style.display = 'none';
+    }
+
+    // Оновлюємо прогрес-бар
+    const fill = document.getElementById('progress-fill');
+    const text = document.getElementById('progress-text');
+    const pct = Math.round((currentStep / TOTAL_STEPS) * 100);
+    if (fill) fill.style.width = pct + '%';
+    if (text) text.textContent = pct + '%';
+}
+
+function goToStep(step) {
+    // Ховаємо поточний
+    const current = document.getElementById('section' + currentStep);
+    if (current) current.classList.remove('active');
+
+    currentStep = step;
+
+    // Показуємо новий
+    const next = document.getElementById('section' + currentStep);
+    if (next) next.classList.add('active');
+
+    updateNav();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function stepNext() {
+    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
+}
+
+function stepPrev() {
+    if (currentStep > 1) goToStep(currentStep - 1);
+}
+
+document.addEventListener('DOMContentLoaded', initSteps);
+
 // ========== SERVICE WORKER ==========
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
