@@ -419,73 +419,76 @@ async function downloadPDF() {
 const TOTAL_STEPS = 8;
 let currentStep = 1;
 
-function initSteps() {
-    const dots = document.getElementById('step-dots');
-    if (!dots) return;
-    dots.innerHTML = Array.from({length: TOTAL_STEPS}, (_, i) =>
-        `<div class="step-dot ${i === 0 ? 'active' : ''}" onclick="goToStep(${i+1})" title="Крок ${i+1}"></div>`
-    ).join('');
-    updateNav();
-}
-
 function updateNav() {
     const prev = document.getElementById('btn-prev');
     const next = document.getElementById('btn-next');
     const counter = document.getElementById('step-counter');
     const submit = document.getElementById('submit-btn');
-    const dots = document.querySelectorAll('.step-dot');
+    const fill = document.getElementById('progress-fill');
 
     if (prev) prev.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
     if (counter) counter.textContent = `Крок ${currentStep} з ${TOTAL_STEPS}`;
+    if (fill) fill.style.width = Math.round((currentStep / TOTAL_STEPS) * 100) + '%';
 
-    // Оновлюємо dots
-    dots.forEach((dot, i) => {
-        dot.classList.remove('active', 'done');
-        if (i + 1 === currentStep) dot.classList.add('active');
-        else if (i + 1 < currentStep) dot.classList.add('done');
-    });
-
-    // Остання секція — показуємо submit замість next
     if (currentStep === TOTAL_STEPS) {
         if (next) next.style.display = 'none';
-        if (submit) submit.style.display = 'block';
+        if (submit) submit.style.display = 'flex';
     } else {
         if (next) next.style.display = 'flex';
         if (submit) submit.style.display = 'none';
     }
-
-    // Оновлюємо прогрес-бар
-    const fill = document.getElementById('progress-fill');
-    const text = document.getElementById('progress-text');
-    const pct = Math.round((currentStep / TOTAL_STEPS) * 100);
-    if (fill) fill.style.width = pct + '%';
-    if (text) text.textContent = pct + '%';
 }
 
 function goToStep(step) {
-    // Ховаємо поточний
-    const current = document.getElementById('section' + currentStep);
-    if (current) current.classList.remove('active');
-
+    const cur = document.getElementById('section' + currentStep);
+    const isForward = step > currentStep;
     currentStep = step;
-
-    // Показуємо новий
     const next = document.getElementById('section' + currentStep);
-    if (next) next.classList.add('active');
+
+    if (cur && next) {
+        // Анімація виїзду поточного
+        cur.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+        cur.style.transform = isForward ? 'translateX(-40px)' : 'translateX(40px)';
+        cur.style.opacity = '0';
+
+        setTimeout(() => {
+            cur.classList.remove('active');
+            cur.style.transform = '';
+            cur.style.opacity = '';
+            cur.style.transition = '';
+
+            // Анімація в'їзду наступного
+            next.style.transform = isForward ? 'translateX(40px)' : 'translateX(-40px)';
+            next.style.opacity = '0';
+            next.style.transition = 'none';
+            next.classList.add('active');
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    next.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                    next.style.transform = 'translateX(0)';
+                    next.style.opacity = '1';
+                });
+            });
+        }, 280);
+    } else {
+        if (cur) cur.classList.remove('active');
+        if (next) next.classList.add('active');
+    }
 
     updateNav();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function stepNext() {
-    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
-}
+function stepNext() { if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1); }
+function stepPrev() { if (currentStep > 1) goToStep(currentStep - 1); }
 
-function stepPrev() {
-    if (currentStep > 1) goToStep(currentStep - 1);
-}
-
-document.addEventListener('DOMContentLoaded', initSteps);
+document.addEventListener('DOMContentLoaded', () => {
+    updateNav();
+    // Ставимо початкову ширину прогресу
+    const fill = document.getElementById('progress-fill');
+    if (fill) fill.style.width = Math.round((1 / TOTAL_STEPS) * 100) + '%';
+});
 
 // ========== SERVICE WORKER ==========
 if ('serviceWorker' in navigator) {
