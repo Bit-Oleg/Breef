@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,800;1,400&family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
 
@@ -125,8 +125,8 @@
                     placeholder="Технічні характеристики, переваги, особливості — чим детальніше, тим краще"
                     oninput="updateCharCount(this, 'product_desc_count')"></textarea>
                 <div class="char-hint">
-                    <span class="char-counter"><span id="product_desc_count">0</span>/500</span>
-                    <span class="hint-text">Не більше 500 символів</span>
+                    
+                    <span class="hint-text">Не більше <span class="char-counter"><span id="product_desc_count">0</span>/500</span> символів</span>
                 </div>
             </div>
 
@@ -136,8 +136,8 @@
                     placeholder="Чому клієнти мають обрати саме вас?"
                     oninput="updateCharCount(this, 'usp_count')"></textarea>
                 <div class="char-hint">
-                    <span class="char-counter"><span id="usp_count">0</span>/500</span>
-                    <span class="hint-text">Не більше 500 символів</span>
+                    
+                    <span class="hint-text">Не більше <span class="char-counter"><span id="usp_count">0</span>/500</span>символів</span>
                 </div>
             </div>
 
@@ -171,8 +171,8 @@
                     placeholder="Опишіть головну «біль» вашої аудиторії"
                     oninput="updateCharCount(this, 'problem_count')"></textarea>
                 <div class="char-hint">
-                    <span class="char-counter"><span id="problem_count">0</span>/500</span>
-                    <span class="hint-text">Не більше 500 символів</span>
+                    
+                    <span class="hint-text">Не більше <span class="char-counter"><span id="problem_count">0</span>/500</span> символів</span>
                 </div>
             </div>
 
@@ -198,8 +198,8 @@
                     placeholder="Чим захоплюється ваша аудиторія?"
                     oninput="updateCharCount(this, 'interests_count')"></textarea>
                 <div class="char-hint">
-                    <span class="char-counter"><span id="interests_count">0</span>/500</span>
-                    <span class="hint-text">Не більше 500 символів</span>
+                    
+                    <span class="hint-text">Не більше <span class="char-counter"><span id="interests_count">0</span>/500</span> символів</span>
                 </div>
             </div>
         </div>
@@ -214,7 +214,12 @@
 
             <div class="field-card">
                 <label>Цілі дизайну</label>
-                <input type="text" id="site_goals" name="site_goals" placeholder="Якого результату ви очікуєте?">
+                <textarea id="technical_aspects" name="technical_aspects" rows="3" maxlength="500"
+                    placeholder="Якого результату ви очікуєте від нового сайту?"
+                    oninput="updateCharCount(this, 'technical_count')"></textarea>
+                <div class="char-hint">
+                    <span class="hint-text">Не більше <span class="char-counter"><span id="technical_count"></span>/500</span> символів</span>
+                </div>
             </div>
 
             <div class="field-card">
@@ -253,8 +258,7 @@
                     placeholder="Особливі вимоги до технічної реалізації"
                     oninput="updateCharCount(this, 'technical_count')"></textarea>
                 <div class="char-hint">
-                    <span class="char-counter"><span id="technical_count">0</span>/500</span>
-                    <span class="hint-text">Не більше 500 символів</span>
+                    <span class="hint-text">Не більше <span class="char-counter"><span id="technical_count">0</span>/500</span> символів</span>
                 </div>
             </div>
         </div>
