@@ -178,26 +178,8 @@ function collectUTM() {
 }
 
 // ========== TOGGLE-ПЕРЕМИКАЧІ ==========
-function initToggles() {
-    document.querySelectorAll('.toggle-checkbox').forEach(function(checkbox) {
-        applyToggleState(checkbox);
-        checkbox.addEventListener('change', function() { applyToggleState(this); });
-    });
-}
-
-function applyToggleState(checkbox) {
-    var wrap = checkbox.closest('.toggle-wrap');
-    if (!wrap) return;
-    var slider = wrap.querySelector('.toggle-slider');
-    var thumb  = wrap.querySelector('.toggle-thumb');
-    if (checkbox.checked) {
-        if (slider) slider.style.background = 'rgba(208, 226, 242, 1)';
-        if (thumb)  { thumb.style.transform = 'translateX(26px)'; thumb.style.background = 'rgba(214, 137, 163, 1)'; }
-    } else {
-        if (slider) slider.style.background = 'rgba(208, 226, 242, 1)';
-        if (thumb)  { thumb.style.transform = 'translateX(0)'; thumb.style.background = 'rgba(143, 166, 185, 0.6)'; }
-    }
-}
+// Анімація toggle керується чистим CSS через :checked ~ .toggle-thumb — JS не потрібен
+function initToggles() {}
 
 // ========== STEP-НАВІГАЦІЯ ==========
 var TOTAL_STEPS = 7;

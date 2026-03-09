@@ -212,8 +212,7 @@ legend {
 }
 
 .field-card:focus-within {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(66, 2, 22, 0.08);
+    box-shadow: 0 0 15px 5px rgba(138, 56, 245, 0.25);
 }
 
 .field-card label {
@@ -246,12 +245,6 @@ legend {
 .field-card textarea {
     resize: vertical;
     min-height: 80px;
-}
-
-.field-row-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
 }
 
 .toggle-row {
@@ -290,15 +283,19 @@ legend {
 }
 
 .toggle-label-wrap .toggle-checkbox {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
 }
 
 .toggle-slider {
     position: absolute;
     inset: 0;
-    background: #DFDFDF;
+    background: rgba(208, 226, 242, 1);
     border-radius: 24px;
-    transition: background 0.3s;
+    transition: background 0.3s ease;
     cursor: pointer;
 }
 
@@ -308,11 +305,17 @@ legend {
     height: 20px;
     left: 2px;
     bottom: 2px;
-    background: white;
+    background: rgba(143, 166, 185, 0.6);
     border-radius: 50%;
-    transition: transform 0.3s;
+    transition: transform 0.3s ease, background 0.3s ease;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     pointer-events: none;
+}
+
+/* Checked state — чистый CSS, без JS */
+.toggle-checkbox:checked ~ .toggle-thumb {
+    transform: translateX(26px);
+    background: rgba(214, 137, 163, 1);
 }
 
 .toggle-labels {
@@ -403,7 +406,7 @@ textarea.invalid {
 .field-error {
     color: var(--accent);
     font-size: 0.78rem;
-    margin-top: -0.6rem;
+    margin-top: 0.25rem;
     margin-bottom: 0.75rem;
     display: none;
 }
