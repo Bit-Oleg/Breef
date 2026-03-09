@@ -80,7 +80,7 @@
    ------------------------------------------------------------ */
 @media (max-width: 480px) {
     .topbar {
-        padding: 0.8rem 1rem;
+        padding: 0.8rem 1.5rem;
     }
 
     .topbar-logo .site-logo {
