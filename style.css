@@ -1073,3 +1073,107 @@ footer {
     letter-spacing: 0%;
     color: rgba(68, 87, 103, 1);
 }
+
+/* ============================================
+   VALIDATION TOAST
+   ============================================ */
+#validation-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(30px);
+    z-index: 99999;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #fff;
+    border-left: 4px solid #dc3545;
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-width: 300px;
+    max-width: 460px;
+    box-shadow: 0 8px 32px rgba(66,2,22,0.18), 0 2px 8px rgba(0,0,0,0.09);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+#validation-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+#validation-toast .toast-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    background: rgba(220,53,69,0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dc3545;
+    font-size: 15px;
+    margin-top: 1px;
+}
+
+#validation-toast .toast-body {
+    flex: 1;
+    min-width: 0;
+}
+
+#validation-toast .toast-title {
+    margin: 0 0 5px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #420216;
+    line-height: 1.3;
+}
+
+#validation-toast .toast-list {
+    margin: 0;
+    padding: 0 0 0 16px;
+}
+
+#validation-toast .toast-list li {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12.5px;
+    color: #445767;
+    line-height: 1.7;
+}
+
+#validation-toast .toast-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    color: #8fa6b9;
+    font-size: 14px;
+    line-height: 1;
+    transition: color 0.2s;
+    align-self: flex-start;
+}
+
+#validation-toast .toast-close:hover {
+    color: #420216;
+}
+
+/* ============================================
+   SHAKE ANIMATION
+   ============================================ */
+@keyframes fieldShake {
+    0%,100% { transform: translateX(0); }
+    18%      { transform: translateX(-7px); }
+    36%      { transform: translateX(7px); }
+    54%      { transform: translateX(-5px); }
+    72%      { transform: translateX(5px); }
+    88%      { transform: translateX(-2px); }
+}
+
+input.shake,
+textarea.shake {
+    animation: fieldShake 0.55s ease both;
+}
