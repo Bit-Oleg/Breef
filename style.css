@@ -212,7 +212,7 @@ legend {
 }
 
 .field-card:focus-within {
-    box-shadow: 0 0 15px 5px rgba(138, 56, 245, 0.25);
+    box-shadow: rgba(143, 166, 185, 0.15) 0 0 15px 5px;
 }
 
 .field-card label {
@@ -312,7 +312,6 @@ legend {
     pointer-events: none;
 }
 
-/* Checked state — чистый CSS, без JS */
 .toggle-checkbox:checked ~ .toggle-thumb {
     transform: translateX(26px);
     background: rgba(214, 137, 163, 1);
@@ -406,7 +405,7 @@ textarea.invalid {
 .field-error {
     color: var(--accent);
     font-size: 0.78rem;
-    margin-top: 0.25rem;
+    margin-top: 0.37rem;
     margin-bottom: 0.75rem;
     display: none;
 }
@@ -687,7 +686,7 @@ input[type="file"] {
     background: var(--accent);
     color: var(--white);
     border: none;
-    padding: 0.85rem 2rem;
+    padding: 0.85rem 1rem;
     border-radius: 0.65rem;
     font-size: 0.95rem;
     font-weight: 700;
@@ -1179,4 +1178,22 @@ footer {
 input.shake,
 textarea.shake {
     animation: fieldShake 0.55s ease both;
+}
+
+.toggle-label-wrap,
+.toggle-slider,
+.toggle-thumb,
+.toggle-checkbox {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.toggle-label-wrap:focus,
+.toggle-label-wrap:focus-visible,
+.toggle-checkbox:focus,
+.toggle-checkbox:focus-visible {
+    outline: none;
+    box-shadow: none;
 }
