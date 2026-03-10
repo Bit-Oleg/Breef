@@ -181,6 +181,95 @@ function collectUTM() {
 // Анімація toggle керується чистим CSS через :checked ~ .toggle-thumb — JS не потрібен
 function initToggles() {}
 
+// ========== БЕГУЧА СТРОКА В ІНПУТАХ ==========
+function initMarqueeInputs() {
+    var inputs = document.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], input[type="url"]');
+
+    inputs.forEach(function(input) {
+        var rafId      = null;  // requestAnimationFrame id
+        var pauseId    = null;  // setTimeout id для паузи
+        var direction  = 1;     // 1 = вперед, -1 = назад
+        var active     = false;
+        var SPEED      = 0.6;   // пікселів за кадр
+        var PAUSE_END  = 700;   // пауза в кінці/початку (мс)
+        var PAUSE_START = 900;  // пауза після фокуса перед стартом
+
+        function stop() {
+            active = false;
+            cancelAnimationFrame(rafId);
+            clearTimeout(pauseId);
+            rafId = null;
+            pauseId = null;
+        }
+
+        function tick() {
+            if (!active) return;
+            var maxScroll = input.scrollWidth - input.clientWidth;
+
+            // Текст влазить — нічого не робимо
+            if (maxScroll <= 0) { stop(); return; }
+
+            input.scrollLeft += SPEED * direction;
+
+            // Досягли кінця — пауза, потім назад
+            if (input.scrollLeft >= maxScroll) {
+                input.scrollLeft = maxScroll;
+                direction = -1;
+                cancelAnimationFrame(rafId);
+                pauseId = setTimeout(function() {
+                    if (active) rafId = requestAnimationFrame(tick);
+                }, PAUSE_END);
+                return;
+            }
+
+            // Досягли початку — пауза, потім вперед
+            if (input.scrollLeft <= 0) {
+                input.scrollLeft = 0;
+                direction = 1;
+                cancelAnimationFrame(rafId);
+                pauseId = setTimeout(function() {
+                    if (active) rafId = requestAnimationFrame(tick);
+                }, PAUSE_END);
+                return;
+            }
+
+            rafId = requestAnimationFrame(tick);
+        }
+
+        input.addEventListener('focus', function() {
+            stop();
+            active    = true;
+            direction = 1;
+            pauseId = setTimeout(function() {
+                if (active) rafId = requestAnimationFrame(tick);
+            }, PAUSE_START);
+        });
+
+        input.addEventListener('blur', function() {
+            stop();
+            // Плавно повертаємось на початок
+            var el = this;
+            var backId = setInterval(function() {
+                if (el.scrollLeft <= 0) { el.scrollLeft = 0; clearInterval(backId); return; }
+                el.scrollLeft -= 4;
+            }, 12);
+        });
+
+        // Зупиняємо при введенні — рестартуємо таймер щоб не заважати набору
+        input.addEventListener('input', function() {
+            stop();
+            active    = true;
+            direction = 1;
+            clearTimeout(pauseId);
+            pauseId = setTimeout(function() {
+                if (active && document.activeElement === input) {
+                    rafId = requestAnimationFrame(tick);
+                }
+            }, 1500);
+        });
+    });
+}
+
 // ========== STEP-НАВІГАЦІЯ ==========
 var TOTAL_STEPS = 7;
 var currentStep = 1;
@@ -318,6 +407,7 @@ function loadScript(src) {
 document.addEventListener('DOMContentLoaded', function() {
     collectUTM();
     initToggles();
+    initMarqueeInputs();
     updateNav();
 
     var form = document.getElementById('brief-form');

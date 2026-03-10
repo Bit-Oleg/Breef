@@ -1197,3 +1197,21 @@ textarea.shake {
     outline: none;
     box-shadow: none;
 }
+/* ============================================
+   ТРОЕТОЧИЕ ДЛЯ ДЛИННОГО ТЕКСТА В ИНПУТАХ
+   ============================================ */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="url"] {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus {
+    text-overflow: clip;
+}
