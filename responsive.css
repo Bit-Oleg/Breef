@@ -179,3 +179,23 @@
         font-size: 1.2rem;
     }
 }
+/* ============================================
+   ТРОЕТОЧИЕ ДЛЯ ДЛИННОГО ТЕКСТА В ИНПУТАХ
+   ============================================ */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="url"] {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* При фокусе показываем весь текст */
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus {
+    text-overflow: clip;
+    overflow: visible;
+}

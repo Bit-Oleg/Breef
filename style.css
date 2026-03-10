@@ -200,7 +200,7 @@ legend {
    4. КАРТОЧКИ ПОЛЕЙ (FIELD CARDS) И ИХ КОНТЕЙНЕРЫ
    ------------------------------------------------------------ */
 .field-card {
-    background: rgba(255, 255, 255, 1);
+    background: #fafafa 100%;
     border-radius: 0.75rem;
     padding: 1rem 1.25rem;
     margin-bottom: 2.625rem;
